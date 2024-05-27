@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Asset/FAssetTypeActions_CSharp.h"
 #include "Listener/FEditorListener.h"
 #include "Modules/ModuleManager.h"
 

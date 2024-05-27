@@ -79,6 +79,8 @@ void FUnrealCSharpEditorModule::StartupModule()
 	{
 		Generator();
 	}
+
+	FAssetToolsModule::GetModule().Get().RegisterAssetTypeActions(MakeShared<FAssetTypeActions_CSharp>());
 }
 
 void FUnrealCSharpEditorModule::ShutdownModule()
