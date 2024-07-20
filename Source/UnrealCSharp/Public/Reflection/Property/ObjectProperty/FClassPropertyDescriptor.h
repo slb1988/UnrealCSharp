@@ -16,5 +16,5 @@ public:
 	virtual bool Identical(const void* A, const void* B, uint32 PortFlags = 0) const override;
 
 private:
-	MonoObject* NewWeakRef(void* InAddress) const;
+	MonoObject* NewWeakRef(void* InAddress, bool bIsCopy) const;
 };
