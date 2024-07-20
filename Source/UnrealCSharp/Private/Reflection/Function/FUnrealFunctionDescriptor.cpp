@@ -78,7 +78,7 @@
 	if (ReturnPropertyDescriptor != nullptr) \
 	{ \
 		ReturnPropertyDescriptor->Get(ReturnPropertyDescriptor->ContainerPtrToValuePtr<void>(Params), \
-		                              reinterpret_cast<void**>(&ReturnValue), false); \
+		                              reinterpret_cast<void**>(&ReturnValue), true); \
 	} \
 	if (Params != nullptr) \
 	{ \
