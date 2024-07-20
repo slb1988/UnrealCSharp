@@ -762,7 +762,7 @@ struct TPropertyValue<T, std::enable_if_t<TIsTOptional<std::decay_t<T>>::Value, 
 			OptionalProperty->SetValueProperty(Property);
 
 			const auto OptionalHelper = new FOptionalHelper(OptionalProperty, InMember,
-			                                                !InGarbageCollectionHandle.IsValid());
+			                                                !InGarbageCollectionHandle.IsValid(), true);
 
 			if (InGarbageCollectionHandle.IsValid())
 			{
