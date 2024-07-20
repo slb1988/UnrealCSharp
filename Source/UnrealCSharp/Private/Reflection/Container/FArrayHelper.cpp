@@ -1,23 +1,21 @@
 ﻿#include "Reflection/Container/FArrayHelper.h"
 #include "Reflection/Property/FPropertyDescriptor.h"
 
-FArrayHelper::FArrayHelper(FProperty* InProperty, void* InData, const bool InbNeedFree):
+FArrayHelper::FArrayHelper(FProperty* InProperty, void* InData,
+	const bool InbNeedFreeData,const bool InbNeedFreeProperty):
 	InnerPropertyDescriptor(nullptr),
 	ScriptArray(nullptr),
-	bNeedFree(false)
+	bNeedFreeData(InbNeedFreeData),
+bNeedFreeProperty(InbNeedFreeProperty)
 {
 	InnerPropertyDescriptor = FPropertyDescriptor::Factory(InProperty);
 
 	if (InData != nullptr)
 	{
-		bNeedFree = InbNeedFree;
-
 		ScriptArray = static_cast<FScriptArray*>(InData);
 	}
 	else
 	{
-		bNeedFree = true;
-
 		ScriptArray = new FScriptArray();
 	}
 }
@@ -33,19 +31,16 @@ void FArrayHelper::Initialize()
 
 void FArrayHelper::Deinitialize()
 {
-	if (bNeedFree && ScriptArray != nullptr)
+	if (bNeedFreeData && ScriptArray != nullptr)
 	{
 		delete ScriptArray;
 
 		ScriptArray = nullptr;
 	}
 
-	if (InnerPropertyDescriptor != nullptr)
+	if (bNeedFreeProperty && InnerPropertyDescriptor != nullptr)
 	{
-		if (bNeedFree)
-		{
-			InnerPropertyDescriptor->DestroyProperty();
-		}
+		InnerPropertyDescriptor->DestroyProperty();
 
 		delete InnerPropertyDescriptor;
 

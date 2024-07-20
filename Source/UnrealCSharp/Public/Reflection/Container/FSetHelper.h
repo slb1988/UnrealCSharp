@@ -5,7 +5,8 @@
 class UNREALCSHARP_API FSetHelper
 {
 public:
-	explicit FSetHelper(FProperty* InProperty, void* InData = nullptr, bool InbNeedFree = false);
+	explicit FSetHelper(FProperty* InProperty, void* InData = nullptr,
+		bool InbNeedFreeData = false, bool InbNeedFreeProperty = false);
 
 	~FSetHelper();
 
@@ -44,5 +45,7 @@ private:
 
 	FScriptSetLayout ScriptSetLayout;
 
-	bool bNeedFree;
+	bool bNeedFreeData;
+	
+	bool bNeedFreeProperty;
 };

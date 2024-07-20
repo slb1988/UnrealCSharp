@@ -1,22 +1,20 @@
 ﻿#include "Reflection/Container/FMapHelper.h"
 #include "CppVersion.h"
 
-FMapHelper::FMapHelper(FProperty* InKeyProperty, FProperty* InValueProperty, void* InData, const bool InbNeedFree):
+FMapHelper::FMapHelper(FProperty* InKeyProperty, FProperty* InValueProperty, void* InData,
+	const bool InbNeedFreeData,const bool InbNeedFreeProperty):
 	KeyPropertyDescriptor(nullptr),
 	ValuePropertyDescriptor(nullptr),
 	ScriptMap(nullptr),
-	bNeedFree(false)
+bNeedFreeData(InbNeedFreeData),
+bNeedFreeProperty(InbNeedFreeProperty)
 {
 	if (InData != nullptr)
 	{
-		bNeedFree = InbNeedFree;
-
 		ScriptMap = static_cast<FScriptMap*>(InData);
 	}
 	else
 	{
-		bNeedFree = true;
-
 		ScriptMap = new FScriptMap();
 	}
 
@@ -44,31 +42,22 @@ void FMapHelper::Initialize()
 
 void FMapHelper::Deinitialize()
 {
-	if (bNeedFree && ScriptMap != nullptr)
+	if (bNeedFreeData && ScriptMap != nullptr)
 	{
 		delete ScriptMap;
 
 		ScriptMap = nullptr;
 	}
 
-	if (KeyPropertyDescriptor != nullptr)
+	if (bNeedFreeProperty && KeyPropertyDescriptor != nullptr && ValuePropertyDescriptor != nullptr)
 	{
-		if (bNeedFree)
-		{
-			KeyPropertyDescriptor->DestroyProperty();
-		}
+		KeyPropertyDescriptor->DestroyProperty();
 
 		delete KeyPropertyDescriptor;
 
 		KeyPropertyDescriptor = nullptr;
-	}
 
-	if (ValuePropertyDescriptor != nullptr)
-	{
-		if (bNeedFree)
-		{
-			ValuePropertyDescriptor->DestroyProperty();
-		}
+		ValuePropertyDescriptor->DestroyProperty();
 
 		delete ValuePropertyDescriptor;
 

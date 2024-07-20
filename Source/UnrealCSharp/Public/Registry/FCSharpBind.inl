@@ -29,7 +29,7 @@ auto FCSharpBind::BindImplementation(MonoObject* InMonoObject, MonoReflectionTyp
 
 	Property->SetPropertyFlags(CPF_HasGetValueTypeHash);
 
-	const auto ContainerHelper = new T(Property);
+	const auto ContainerHelper = new T(Property, nullptr, true, true);
 
 	FCSharpEnvironment::GetEnvironment().AddContainerReference(ContainerHelper, InMonoObject);
 
@@ -49,7 +49,7 @@ auto FCSharpBind::BindImplementation(MonoObject* InMonoObject, MonoReflectionTyp
 
 	ValueProperty->SetPropertyFlags(CPF_HasGetValueTypeHash);
 
-	const auto ContainerHelper = new T(KeyProperty, ValueProperty);
+	const auto ContainerHelper = new T(KeyProperty, ValueProperty, nullptr, true, true);
 
 	FCSharpEnvironment::GetEnvironment().AddContainerReference(ContainerHelper, InMonoObject);
 

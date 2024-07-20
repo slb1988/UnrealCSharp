@@ -505,7 +505,7 @@ struct TPropertyValue<T, std::enable_if_t<TIsTMap<std::decay_t<T>>::Value, T>>
 			ValueProperty->SetPropertyFlags(CPF_HasGetValueTypeHash);
 
 			const auto MapHelper = new FMapHelper(KeyProperty, ValueProperty, InMember,
-			                                      !InGarbageCollectionHandle.IsValid());
+			                                      !InGarbageCollectionHandle.IsValid(), true);
 
 			if (InGarbageCollectionHandle.IsValid())
 			{
@@ -573,7 +573,7 @@ struct TPropertyValue<T, std::enable_if_t<TIsTSet<std::decay_t<T>>::Value, T>>
 
 			Property->SetPropertyFlags(CPF_HasGetValueTypeHash);
 
-			const auto SetHelper = new FSetHelper(Property, InMember, !InGarbageCollectionHandle.IsValid());
+			const auto SetHelper = new FSetHelper(Property, InMember, !InGarbageCollectionHandle.IsValid(), true);
 
 			if (InGarbageCollectionHandle.IsValid())
 			{
@@ -670,7 +670,7 @@ struct TPropertyValue<T, std::enable_if_t<TIsTArray<std::decay_t<T>>::Value, T>>
 
 			Property->SetPropertyFlags(CPF_HasGetValueTypeHash);
 
-			const auto ArrayHelper = new FArrayHelper(Property, InMember, !InGarbageCollectionHandle.IsValid());
+			const auto ArrayHelper = new FArrayHelper(Property, InMember, !InGarbageCollectionHandle.IsValid(), true);
 
 			if (InGarbageCollectionHandle.IsValid())
 			{

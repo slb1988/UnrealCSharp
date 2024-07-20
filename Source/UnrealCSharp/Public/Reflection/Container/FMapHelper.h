@@ -6,7 +6,7 @@ class UNREALCSHARP_API FMapHelper
 {
 public:
 	explicit FMapHelper(FProperty* InKeyProperty, FProperty* InValueProperty, void* InData = nullptr,
-	                    bool InbNeedFree = false);
+	                    bool InbNeedFreeData = false, bool InbNeedFreeProperty = false);
 
 	~FMapHelper();
 
@@ -59,5 +59,7 @@ private:
 
 	FScriptMapLayout ScriptMapLayout;
 
-	bool bNeedFree;
+	bool bNeedFreeData;
+	
+	bool bNeedFreeProperty;
 };
