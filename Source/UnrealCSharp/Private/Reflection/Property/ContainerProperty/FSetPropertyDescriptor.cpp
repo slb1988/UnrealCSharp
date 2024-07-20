@@ -2,7 +2,7 @@
 #include "Environment/FCSharpEnvironment.h"
 #include "Reflection/Container/FSetHelper.h"
 
-void FSetPropertyDescriptor::Get(void* Src, void** Dest) const
+void FSetPropertyDescriptor::Get(void* Src, void** Dest, bool bIsCopy) const
 {
 	if (Property != nullptr)
 	{

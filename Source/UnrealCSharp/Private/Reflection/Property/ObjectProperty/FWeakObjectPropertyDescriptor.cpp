@@ -1,7 +1,7 @@
 ﻿#include "Reflection/Property/ObjectProperty/FWeakObjectPropertyDescriptor.h"
 #include "Environment/FCSharpEnvironment.h"
 
-void FWeakObjectPropertyDescriptor::Get(void* Src, void** Dest) const
+void FWeakObjectPropertyDescriptor::Get(void* Src, void** Dest, bool bIsCopy) const
 {
 	if (Property != nullptr)
 	{

@@ -1,7 +1,7 @@
 ﻿#include "Reflection/Property/ObjectProperty/FClassPropertyDescriptor.h"
 #include "Environment/FCSharpEnvironment.h"
 
-void FClassPropertyDescriptor::Get(void* Src, void** Dest) const
+void FClassPropertyDescriptor::Get(void* Src, void** Dest, bool bIsCopy) const
 {
 	if (Property != nullptr)
 	{

@@ -2,7 +2,7 @@
 #include "Environment/FCSharpEnvironment.h"
 #include "Reflection/Container/FMapHelper.h"
 
-void FMapPropertyDescriptor::Get(void* Src, void** Dest) const
+void FMapPropertyDescriptor::Get(void* Src, void** Dest, bool bIsCopy) const
 {
 	if (Property != nullptr)
 	{

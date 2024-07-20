@@ -1,7 +1,7 @@
 ﻿#include "Reflection/Property/StringProperty/FTextPropertyDescriptor.h"
 #include "Environment/FCSharpEnvironment.h"
 
-void FTextPropertyDescriptor::Get(void* Src, void** Dest) const
+void FTextPropertyDescriptor::Get(void* Src, void** Dest, bool bIsCopy) const
 {
 	if (Property != nullptr)
 	{

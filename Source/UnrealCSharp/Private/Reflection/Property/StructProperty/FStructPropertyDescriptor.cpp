@@ -7,7 +7,7 @@ FStructPropertyDescriptor::FStructPropertyDescriptor(FStructProperty* InProperty
 	FCSharpEnvironment::GetEnvironment().Bind(InProperty->Struct, false);
 }
 
-void FStructPropertyDescriptor::Get(void* Src, void** Dest) const
+void FStructPropertyDescriptor::Get(void* Src, void** Dest, bool bIsCopy) const
 {
 	if (Property != nullptr)
 	{

@@ -1,7 +1,7 @@
 ﻿#include "Reflection/Property/ObjectProperty/FLazyObjectPropertyDescriptor.h"
 #include "Environment/FCSharpEnvironment.h"
 
-void FLazyObjectPropertyDescriptor::Get(void* Src, void** Dest) const
+void FLazyObjectPropertyDescriptor::Get(void* Src, void** Dest, bool bIsCopy) const
 {
 	if (Property != nullptr)
 	{

@@ -2,7 +2,7 @@
 #include "Environment/FCSharpEnvironment.h"
 #include "Reflection/Container/FArrayHelper.h"
 
-void FArrayPropertyDescriptor::Get(void* Src, void** Dest) const
+void FArrayPropertyDescriptor::Get(void* Src, void** Dest, bool bIsCopy) const
 {
 	if (Property != nullptr)
 	{
