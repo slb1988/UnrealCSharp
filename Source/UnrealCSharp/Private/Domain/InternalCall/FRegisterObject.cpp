@@ -28,7 +28,7 @@ namespace
 
 			const auto InClass = LoadObject<UClass>(nullptr, ClassName.Get());
 
-			return FCSharpEnvironment::GetEnvironment().Bind(InClass);
+			return FCSharpEnvironment::GetEnvironment().Bind(InClass, false);
 		}
 
 		static MonoObject* GetClassImplementation(const FGarbageCollectionHandle InGarbageCollectionHandle)
@@ -37,7 +37,7 @@ namespace
 			{
 				const auto Class = FoundObject->GetClass();
 
-				return FCSharpEnvironment::GetEnvironment().Bind(Class);
+				return FCSharpEnvironment::GetEnvironment().Bind(Class, true);
 			}
 
 			return nullptr;

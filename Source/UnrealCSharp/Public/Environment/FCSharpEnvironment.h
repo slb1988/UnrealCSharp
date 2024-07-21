@@ -46,13 +46,13 @@ public:
 	void OnAsyncLoadingFlushUpdate();
 
 public:
-	MonoObject* Bind(UObject* Object) const;
+	MonoObject* Bind(UObject* Object, bool bIsWeak) const;
 
-	MonoObject* Bind(const UObject* Object) const;
+	MonoObject* Bind(const UObject* Object, bool bIsWeak) const;
 
-	MonoObject* Bind(UClass* Class) const;
+	MonoObject* Bind(UClass* Class, bool bIsWeak) const;
 
-	bool Bind(UObject* Object, bool bNeedMonoClass) const;
+	MonoObject* Bind(UObject* Object, bool bNeedMonoClass, bool bIsWeak) const;
 
 	bool Bind(UStruct* InStruct, bool bNeedMonoClass) const;
 
@@ -96,7 +96,7 @@ public:
 	template <typename T, typename U>
 	auto GetAddress(const FGarbageCollectionHandle& InGarbageCollectionHandle) const;
 
-	bool AddObjectReference(UObject* InObject, MonoObject* InMonoObject) const;
+	bool AddObjectReference(UObject* InObject, MonoObject* InMonoObject, bool bIsWeak) const;
 
 	MonoObject* GetObject(const UObject* InObject) const;
 

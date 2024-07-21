@@ -65,13 +65,22 @@ FGarbageCollectionHandle FObjectRegistry::GetGarbageCollectionHandle(const UObje
 	return FoundGarbageCollectionHandle != nullptr ? *FoundGarbageCollectionHandle : FGarbageCollectionHandle();
 }
 
-bool FObjectRegistry::AddReference(UObject* InObject, MonoObject* InMonoObject)
+bool FObjectRegistry::AddReference(UObject* InObject, MonoObject* InMonoObject, const bool bIsWeak)
 {
-	const auto GarbageCollectionHandle = FGarbageCollectionHandle::NewRef(InMonoObject, true);
+	if(bIsWeak)
+	{
+		const auto GarbageCollectionHandle = FGarbageCollectionHandle::NewWeakRef(InMonoObject, true);
 
-	Object2GarbageCollectionHandleMap.Add(InObject, GarbageCollectionHandle);
+		GarbageCollectionHandle2Object.Add(GarbageCollectionHandle, &*InObject);
+	}
+	else
+	{
+		const auto GarbageCollectionHandle = FGarbageCollectionHandle::NewRef(InMonoObject, true);
 
-	GarbageCollectionHandle2Object.Add(GarbageCollectionHandle, &*InObject);
+		Object2GarbageCollectionHandleMap.Add(InObject, GarbageCollectionHandle);
+
+		GarbageCollectionHandle2Object.Add(GarbageCollectionHandle, &*InObject);
+	}
 
 	return true;
 }
@@ -96,21 +105,9 @@ bool FObjectRegistry::RemoveReference(const UObject* InObject)
 
 bool FObjectRegistry::RemoveReference(const FGarbageCollectionHandle& InGarbageCollectionHandle)
 {
-	if (const auto FoundValue = GarbageCollectionHandle2Object.Find(InGarbageCollectionHandle))
-	{
-		if (const auto FoundGarbageCollectionHandle = Object2GarbageCollectionHandleMap.Find(*FoundValue))
-		{
-			FGarbageCollectionHandle::Free(*FoundGarbageCollectionHandle, false);
+	(void)FCSharpEnvironment::GetEnvironment().RemoveReference(InGarbageCollectionHandle);
 
-			(void)FCSharpEnvironment::GetEnvironment().RemoveReference(*FoundGarbageCollectionHandle);
-		}
+	GarbageCollectionHandle2Object.Remove(InGarbageCollectionHandle);
 
-		GarbageCollectionHandle2Object.Remove(InGarbageCollectionHandle);
-
-		Object2GarbageCollectionHandleMap.Remove(*FoundValue);
-
-		return true;
-	}
-
-	return false;
+	return true;
 }

@@ -46,7 +46,7 @@ namespace
 			const auto Multi = FCSharpEnvironment::GetEnvironment().GetMulti<TScriptInterface<IInterface>>(
 				InGarbageCollectionHandle);
 
-			return FCSharpEnvironment::GetEnvironment().Bind(Multi->GetObject());
+			return FCSharpEnvironment::GetEnvironment().Bind(Multi->GetObject(), true);
 		}
 
 		FRegisterScriptInterface()
