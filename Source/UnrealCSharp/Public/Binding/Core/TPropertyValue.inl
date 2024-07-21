@@ -41,7 +41,7 @@ struct TPrimitivePropertyValue
 {
 	static MonoObject* Get(std::decay_t<T>* InMember,
 		const FGarbageCollectionHandle& InGarbageCollectionHandle = FGarbageCollectionHandle::Zero(),
-						   bool bNeedFree = true, bool bIsWeak = true)
+						   bool bNeedFree = true, bool bIsCopy = true)
 	{
 		return FCSharpEnvironment::GetEnvironment().GetDomain()->Value_Box(
 			TPropertyClass<T, T>::Get(), InMember);
@@ -58,7 +58,7 @@ struct TStringPropertyValue
 {
 	static MonoObject* Get(std::decay_t<T>* InMember,
 	const FGarbageCollectionHandle& InGarbageCollectionHandle = FGarbageCollectionHandle::Zero(),
-	bool bNeedFree = true, bool bIsWeak = true)
+	bool bNeedFree = true, bool bIsCopy = true)
 	{
 		const auto FoundMonoClass = TPropertyClass<T, T>::Get();
 
@@ -86,7 +86,7 @@ struct TMultiPropertyValue
 {
 	static MonoObject* Get(std::decay_t<T>* InMember,
 	const FGarbageCollectionHandle& InGarbageCollectionHandle = FGarbageCollectionHandle::Zero(),
-	bool bNeedFree = true, bool bIsWeak = true)
+	bool bNeedFree = true, bool bIsCopy = true)
 	{
 		auto SrcMonoObject = FCSharpEnvironment::GetEnvironment().GetMultiObject<std::decay_t<T>>(InMember);
 
@@ -115,7 +115,7 @@ struct TBindingPropertyValue<T, std::enable_if_t<!std::is_pointer_v<std::remove_
 {
 	static MonoObject* Get(std::decay_t<T>* InMember,
 	const FGarbageCollectionHandle& InGarbageCollectionHandle = FGarbageCollectionHandle::Zero(),
-	bool bNeedFree = true, bool bIsWeak = true)
+	bool bNeedFree = true, bool bIsCopy = true)
 	{
 		auto SrcMonoObject = FCSharpEnvironment::GetEnvironment().GetBinding(InMember);
 
@@ -152,7 +152,7 @@ struct TBindingPropertyValue<T, std::enable_if_t<std::is_pointer_v<std::remove_r
 {
 	static MonoObject* Get(std::decay_t<T>* InMember,
 	const FGarbageCollectionHandle& InGarbageCollectionHandle = FGarbageCollectionHandle::Zero(),
-	bool bNeedFree = true, bool bIsWeak = true)
+	bool bNeedFree = true, bool bIsCopy = true)
 	{
 		auto SrcMonoObject = FCSharpEnvironment::GetEnvironment().GetBinding(*InMember);
 
@@ -189,7 +189,7 @@ struct TScriptStructPropertyValue<T, std::enable_if_t<!std::is_pointer_v<std::re
 {
 	static MonoObject* Get(std::decay_t<T>* InMember,
 	const FGarbageCollectionHandle& InGarbageCollectionHandle = FGarbageCollectionHandle::Zero(),
-	bool bNeedFree = true, bool bIsWeak = true)
+	bool bNeedFree = true, bool bIsCopy = true)
 	{
 		auto SrcMonoObject = FCSharpEnvironment::GetEnvironment().GetObject(
 			TBaseStructure<std::decay_t<T>>::Get(), InMember);
@@ -232,7 +232,7 @@ struct TScriptStructPropertyValue<T, std::enable_if_t<std::is_pointer_v<std::rem
 {
 	static MonoObject* Get(std::decay_t<T>* InMember,
 	const FGarbageCollectionHandle& InGarbageCollectionHandle = FGarbageCollectionHandle::Zero(),
-	bool bNeedFree = true, bool bIsWeak = true)
+	bool bNeedFree = true, bool bIsCopy = true)
 	{
 		auto SrcMonoObject = FCSharpEnvironment::GetEnvironment().GetObject(
 			TBaseStructure<std::decay_t<std::remove_pointer_t<T>>>::Get(), *InMember);
@@ -347,10 +347,10 @@ struct TPropertyValue<T,
                                        !std::is_same_v<std::remove_pointer_t<std::decay_t<T>>, UClass>, T>>
 {
 	static MonoObject* Get(std::decay_t<T>* InMember, const FGarbageCollectionHandle& InGarbageCollectionHandle = FGarbageCollectionHandle::Zero(),
-						   bool bNeedFree = true, bool bIsWeak = true)
+						   bool bNeedFree = true, bool bIsCopy = true)
 	{
 		return FCSharpEnvironment::GetEnvironment().Bind(
-			std::add_pointer_t<std::remove_const_t<std::remove_pointer_t<std::decay_t<T>>>>(*InMember), bIsWeak);
+			std::add_pointer_t<std::remove_const_t<std::remove_pointer_t<std::decay_t<T>>>>(*InMember), bIsCopy);
 	}
 
 	static std::decay_t<T> Set(const FGarbageCollectionHandle InValue)
@@ -363,9 +363,9 @@ template <typename T>
 struct TPropertyValue<T, std::enable_if_t<TIsTObjectPtr<T>::Value, T>>
 {
 	static MonoObject* Get(T* InMember, const FGarbageCollectionHandle& InGarbageCollectionHandle = FGarbageCollectionHandle::Zero(),
-						   bool bNeedFree = true, bool bIsWeak = true)
+						   bool bNeedFree = true, bool bIsCopy = true)
 	{
-		return FCSharpEnvironment::GetEnvironment().Bind(*InMember, bIsWeak);
+		return FCSharpEnvironment::GetEnvironment().Bind(*InMember, bIsCopy);
 	}
 
 	static T Set(const FGarbageCollectionHandle InValue)
@@ -391,7 +391,7 @@ struct TPropertyValue<T, std::enable_if_t<TIsUStruct<std::decay_t<T>>::Value, T>
 {
 	static MonoObject* Get(std::decay_t<T>* InMember,
 	                       const FGarbageCollectionHandle& InGarbageCollectionHandle = FGarbageCollectionHandle::Zero(),
-	                       bool bNeedFree = true, bool bIsWeak = true)
+	                       bool bNeedFree = true, bool bIsCopy = true)
 	{
 		auto SrcMonoObject = FCSharpEnvironment::GetEnvironment().GetObject(std::decay_t<T>::StaticStruct(), InMember);
 
@@ -466,7 +466,7 @@ struct TPropertyValue<T, std::enable_if_t<TIsTMap<std::decay_t<T>>::Value, T>>
 {
 	static MonoObject* Get(std::decay_t<T>* InMember,
 	                       const FGarbageCollectionHandle& InGarbageCollectionHandle = FGarbageCollectionHandle::Zero(),
-	                       bool bNeedFree = true, bool bIsWeak = true)
+	                       bool bNeedFree = true, bool bIsCopy = true)
 	{
 		auto SrcMonoObject = FCSharpEnvironment::GetEnvironment().GetContainerObject<FMapHelper>(InMember);
 
@@ -551,7 +551,7 @@ struct TPropertyValue<T, std::enable_if_t<TIsTSet<std::decay_t<T>>::Value, T>>
 {
 	static MonoObject* Get(std::decay_t<T>* InMember,
 	                       const FGarbageCollectionHandle& InGarbageCollectionHandle = FGarbageCollectionHandle::Zero(),
-	                       bool bNeedFree = true, bool bIsWeak = true)
+	                       bool bNeedFree = true, bool bIsCopy = true)
 	{
 		auto SrcMonoObject = FCSharpEnvironment::GetEnvironment().GetContainerObject<FSetHelper>(InMember);
 
@@ -623,7 +623,7 @@ template <typename T>
 struct TPropertyValue<T, std::enable_if_t<std::is_same_v<std::remove_pointer_t<std::decay_t<T>>, UClass>, T>>
 {
 	static MonoObject* Get(std::decay_t<T>* InMember, const FGarbageCollectionHandle& InGarbageCollectionHandle = FGarbageCollectionHandle::Zero(),
-						   bool bNeedFree = true, bool bIsWeak = true)
+						   bool bNeedFree = true, bool bIsCopy = true)
 	{
 		const auto FoundMonoClass = TPropertyClass<T, T>::Get();
 
@@ -649,7 +649,7 @@ struct TPropertyValue<T, std::enable_if_t<TIsTArray<std::decay_t<T>>::Value, T>>
 {
 	static MonoObject* Get(std::decay_t<T>* InMember,
 	                       const FGarbageCollectionHandle& InGarbageCollectionHandle = FGarbageCollectionHandle::Zero(),
-	                       bool bNeedFree = true,bool bIsWeak = true)
+	                       bool bNeedFree = true,bool bIsCopy = true)
 	{
 		auto SrcMonoObject = FCSharpEnvironment::GetEnvironment().GetContainerObject<FArrayHelper>(InMember);
 
@@ -707,7 +707,7 @@ struct TPropertyValue<T, std::enable_if_t<TIsEnum<std::decay_t<T>>::Value && !TI
 	TPrimitivePropertyValue<T>
 {
 	static MonoObject* Get(std::decay_t<T>* InMember, const FGarbageCollectionHandle& InGarbageCollectionHandle = FGarbageCollectionHandle::Zero(),
-						   bool bNeedFree = true, bool bIsWeak = true)
+						   bool bNeedFree = true, bool bIsCopy = true)
 	{
 		return FCSharpEnvironment::GetEnvironment().GetDomain()->Value_Box(
 			TPropertyClass<T, T>::Get(), InMember);
@@ -719,7 +719,7 @@ struct TPropertyValue<T, std::enable_if_t<TIsTEnumAsByte<std::decay_t<T>>::Value
 	TPrimitivePropertyValue<T>
 {
 	static MonoObject* Get(std::decay_t<T>* InMember, const FGarbageCollectionHandle& InGarbageCollectionHandle = FGarbageCollectionHandle::Zero(),
-						   bool bNeedFree = true, bool bIsWeak = true)
+						   bool bNeedFree = true, bool bIsCopy = true)
 	{
 		return FCSharpEnvironment::GetEnvironment().GetDomain()->Value_Box(
 			TPropertyClass<T, T>::Get(), InMember);
