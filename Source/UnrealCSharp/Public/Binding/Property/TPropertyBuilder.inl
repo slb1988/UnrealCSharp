@@ -47,7 +47,7 @@ struct TPropertyInfoBuilder<Class, Result, Member, std::enable_if_t<!std::is_sam
 		if (auto FoundObject = FCSharpEnvironment::TGetObject<Class, Class>()(
 			FCSharpEnvironment::GetEnvironment(), InGarbageCollectionHandle))
 		{
-			return TPropertyValue<Result, Result>::Get(&(FoundObject->*Member));
+			return TPropertyValue<Result, Result>::Get(&(FoundObject->*Member), FGarbageCollectionHandle::Zero(), false);
 		}
 
 		return nullptr;
@@ -73,7 +73,7 @@ struct TPropertyInfoBuilder<Class, Result, Member, std::enable_if_t<std::is_same
 {
 	static MonoObject* Get(const FGarbageCollectionHandle InGarbageCollectionHandle, MonoObject** OutValue)
 	{
-		return TPropertyValue<Result, Result>::Get(const_cast<std::remove_const_t<Result>*>(Member));
+		return TPropertyValue<Result, Result>::Get(const_cast<std::remove_const_t<Result>*>(Member), FGarbageCollectionHandle::Zero(), false);
 	}
 
 	static void Set(const FGarbageCollectionHandle InGarbageCollectionHandle, MonoObject* InValue)
@@ -136,7 +136,7 @@ struct TCompoundPropertyBuilder<Class, Result, Member, std::enable_if_t<!std::is
 		if (auto FoundObject = FCSharpEnvironment::TGetObject<Class, Class>()(
 			FCSharpEnvironment::GetEnvironment(), InGarbageCollectionHandle))
 		{
-			return TPropertyValue<Result, Result>::Get(&(FoundObject->*Member), InGarbageCollectionHandle);
+			return TPropertyValue<Result, Result>::Get(&(FoundObject->*Member), InGarbageCollectionHandle, false);
 		}
 
 		return nullptr;

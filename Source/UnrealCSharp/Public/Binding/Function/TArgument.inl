@@ -39,7 +39,7 @@ struct TBaseArgument<T, true>
 
 	MonoObject* Set()
 	{
-		return TPropertyValue<Type, Type>::Get(const_cast<std::decay_t<T>*>(&Value));
+		return TPropertyValue<Type, Type>::Get(const_cast<std::decay_t<T>*>(&Value), FGarbageCollectionHandle::Zero(), !TTypeInfo<T>::IsReference());
 	}
 
 	constexpr bool IsRef() const
@@ -75,7 +75,7 @@ struct TBaseArgument<T, false>
 
 	MonoObject* Set()
 	{
-		return TPropertyValue<Type, Type>::Get(const_cast<std::decay_t<T>*>(&Value));
+		return TPropertyValue<Type, Type>::Get(const_cast<std::decay_t<T>*>(&Value), FGarbageCollectionHandle::Zero(), !TTypeInfo<T>::IsReference());
 	}
 
 	constexpr bool IsRef() const
@@ -113,7 +113,7 @@ struct TCompoundArgument<T, std::enable_if_t<!std::is_pointer_v<std::remove_refe
 		}
 		else
 		{
-			return TPropertyValue<Type, Type>::Get(const_cast<std::decay_t<T>*>(new Type(Super::Value)));
+			return TPropertyValue<Type, Type>::Get(const_cast<std::decay_t<T>*>(&(Super::Value)), FGarbageCollectionHandle::Zero(), true);
 		}
 	}
 };

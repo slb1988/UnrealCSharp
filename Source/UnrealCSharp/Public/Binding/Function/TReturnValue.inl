@@ -20,7 +20,7 @@ struct TBaseReturnValue
 	}
 
 	explicit TBaseReturnValue(Type&& InValue):
-		Object{TPropertyValue<Type, Type>::Get(const_cast<std::decay_t<T>*>(&InValue))}
+		Object{TPropertyValue<Type, Type>::Get(const_cast<std::decay_t<T>*>(&InValue), FGarbageCollectionHandle::Zero(), true)}
 	{
 	}
 
@@ -52,11 +52,11 @@ struct TCompoundReturnValue :
 	{
 		if constexpr (TTypeInfo<T>::IsReference() || std::is_pointer_v<T>)
 		{
-			Super::Object = TPropertyValue<Type, Type>::Get(const_cast<std::decay_t<T>*>(&InValue));
+			Super::Object = TPropertyValue<Type, Type>::Get(const_cast<std::decay_t<T>*>(&InValue), FGarbageCollectionHandle::Zero(), false);
 		}
 		else
 		{
-			Super::Object = TPropertyValue<Type, Type>::Get(new Type(InValue));
+			Super::Object = TPropertyValue<Type, Type>::Get(const_cast<std::decay_t<T>*>(&InValue), FGarbageCollectionHandle::Zero(), true);
 		}
 	}
 };
