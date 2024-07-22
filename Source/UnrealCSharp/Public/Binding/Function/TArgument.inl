@@ -39,7 +39,7 @@ struct TBaseArgument<T, true>
 
 	MonoObject* Set()
 	{
-		return TPropertyValue<Type, Type>::Get(const_cast<std::decay_t<T>*>(&Value), !TTypeInfo<T>::IsReference());
+		return TPropertyValue<Type, Type>::Get<!TTypeInfo<T>::IsReference()>(const_cast<std::decay_t<T>*>(&Value));
 	}
 
 	constexpr bool IsRef() const
@@ -75,7 +75,7 @@ struct TBaseArgument<T, false>
 
 	MonoObject* Set()
 	{
-		return TPropertyValue<Type, Type>::Get(const_cast<std::decay_t<T>*>(&Value), !TTypeInfo<T>::IsReference());
+		return TPropertyValue<Type, Type>::Get<!TTypeInfo<T>::IsReference()>(const_cast<std::decay_t<T>*>(&Value));
 	}
 
 	constexpr bool IsRef() const
