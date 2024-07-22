@@ -383,3 +383,17 @@ struct TArgument<T, std::enable_if_t<TIsTSoftClassPtr<std::decay_t<T>>::Value, T
 {
 	using TMultiArgument<T>::TMultiArgument;
 };
+
+#if UE_F_OPTIONAL_PROPERTY
+template <typename T>
+struct TArgument<T, std::enable_if_t<TIsTOptional<std::decay_t<T>>::Value, T>> :
+	TCompoundArgument<std::decay_t<T>, std::decay_t<T>>
+{
+	using TCompoundArgument<std::decay_t<T>, std::decay_t<T>>::TCompoundArgument;
+
+	constexpr bool IsRef() const
+	{
+		return TTypeInfo<T>::Get()->IsRef();
+	}
+};
+#endif

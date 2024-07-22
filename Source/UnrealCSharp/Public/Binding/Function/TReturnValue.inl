@@ -294,3 +294,12 @@ struct TReturnValue<T, std::enable_if_t<TIsTSoftClassPtr<std::decay_t<T>>::Value
 {
 	using TMultiReturnValue<T>::TMultiReturnValue;
 };
+
+#if UE_F_OPTIONAL_PROPERTY
+template <typename T>
+struct TReturnValue<T, std::enable_if_t<TIsTOptional<std::decay_t<T>>::Value>> :
+	TCompoundReturnValue<T>
+{
+	using TCompoundReturnValue<T>::TCompoundReturnValue;
+};
+#endif
