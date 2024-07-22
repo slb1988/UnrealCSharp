@@ -100,22 +100,6 @@ struct TCompoundArgument<T, std::enable_if_t<!std::is_pointer_v<std::remove_refe
 	TBaseArgument<T>
 {
 	using TBaseArgument<T>::TBaseArgument;
-
-	using Super = TBaseArgument<T>;
-
-	using Type = typename Super::Type;
-
-	MonoObject* Set()
-	{
-		if constexpr (TTypeInfo<T>::IsReference())
-		{
-			return Super::Set();
-		}
-		else
-		{
-			return TPropertyValue<Type, Type>::Get(const_cast<std::decay_t<T>*>(&(Super::Value)), true);
-		}
-	}
 };
 
 template <typename T>
