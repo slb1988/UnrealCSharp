@@ -60,6 +60,6 @@ private:
 	FScriptMapLayout ScriptMapLayout;
 
 	bool bNeedFreeData;
-	
+
 	bool bNeedFreeProperty;
 };

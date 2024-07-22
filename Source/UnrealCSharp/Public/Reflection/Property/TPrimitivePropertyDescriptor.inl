@@ -34,7 +34,7 @@ public:
 			Super::Property->CopySingleValue(Dest, Src);
 		}
 	}
-	
+
 	virtual void DestroyProperty() override
 	{
 		if (Super::Property != nullptr)

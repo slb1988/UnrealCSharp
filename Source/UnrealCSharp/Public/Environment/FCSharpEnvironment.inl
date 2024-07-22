@@ -240,7 +240,7 @@ auto FCSharpEnvironment::GetBinding(const FGarbageCollectionHandle& InGarbageCol
 }
 
 template <typename T>
-auto FCSharpEnvironment::AddBindingReference(MonoObject* InMonoObject, const T* InObject, bool bNeedFree) const
+auto FCSharpEnvironment::AddBindingReference(MonoObject* InMonoObject, const T* InObject, const bool bNeedFree) const
 {
 	return BindingRegistry != nullptr ? BindingRegistry->AddReference(InObject, InMonoObject, bNeedFree) : false;
 }

@@ -12,10 +12,9 @@ public:
 	virtual void Get(void* Src, void** Dest, bool bIsCopy) const override
 	{
 	}
-	
+
 	virtual void Get(void* Src, void* Dest) const override
 	{
-		Get(Src, static_cast<void**>(Dest));
 	}
 
 	void* CopyValue(const void* InAddress) const
@@ -24,7 +23,7 @@ public:
 			FMemory::Malloc(TPropertyDescriptor<T, false>::Property->ElementSize)));
 
 		TPropertyDescriptor<T, false>::Property->InitializeValue(Value);
-		
+
 		TPropertyDescriptor<T, false>::Property->CopySingleValue(Value, InAddress);
 
 		return Value;

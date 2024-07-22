@@ -17,5 +17,5 @@ public:
 private:
 	MonoObject* NewRef(void* InAddress) const;
 
-	MonoObject* NewWeakRef(void* InAddress,bool bIsCopy) const;
+	MonoObject* NewWeakRef(void* InAddress, bool bIsCopy) const;
 };
