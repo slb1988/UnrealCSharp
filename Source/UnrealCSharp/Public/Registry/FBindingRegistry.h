@@ -81,8 +81,8 @@ public:
 	MonoObject* GetObject(const FBindingValueMapping::FAddressType InAddress);
 
 public:
-	template <typename T>
-	auto AddReference(const T* InObject, MonoObject* InMonoObject, bool bNeedFree);
+	template <typename T, bool bNeedFree>
+	auto AddReference(const T* InObject, MonoObject* InMonoObject);
 
 	template <typename T>
 	auto AddReference(const FGarbageCollectionHandle& InOwner, const T* InObject, MonoObject* InMonoObject);

@@ -51,7 +51,7 @@ MonoObject* FInterfacePropertyDescriptor::NewWeakRef(void* InAddress, const bool
 	{
 		const auto Object = FCSharpEnvironment::GetEnvironment().GetDomain()->Object_New(Class);
 		
-		FCSharpEnvironment::GetEnvironment().AddMultiReference<TScriptInterface<IInterface>>(Object, CopyValue(InAddress), true);
+		FCSharpEnvironment::GetEnvironment().AddMultiReference<TScriptInterface<IInterface>, true>(Object, CopyValue(InAddress));
 
 		return Object;
 	}
@@ -63,7 +63,7 @@ MonoObject* FInterfacePropertyDescriptor::NewWeakRef(void* InAddress, const bool
 		{
 			Object = FCSharpEnvironment::GetEnvironment().GetDomain()->Object_New(Class);
 
-			FCSharpEnvironment::GetEnvironment().AddMultiReference<TScriptInterface<IInterface>>(Object, InAddress, false);
+			FCSharpEnvironment::GetEnvironment().AddMultiReference<TScriptInterface<IInterface>, false>(Object, InAddress);
 		}
 
 		return Object;

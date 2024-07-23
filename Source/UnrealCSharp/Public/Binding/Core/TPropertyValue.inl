@@ -71,8 +71,8 @@ struct TStringPropertyValue
 
 			SrcMonoObject = FCSharpEnvironment::GetEnvironment().GetDomain()->Object_New(FoundMonoClass);
 
-			FCSharpEnvironment::GetEnvironment().AddStringReference<std::decay_t<T>>(
-				SrcMonoObject, InMember, false);
+			FCSharpEnvironment::GetEnvironment().AddStringReference<std::decay_t<T>, false>(
+				SrcMonoObject, InMember);
 		}
 
 		return SrcMonoObject;
@@ -87,13 +87,13 @@ struct TStringPropertyValue
 
 		if constexpr (bIsReference)
 		{
-			FCSharpEnvironment::GetEnvironment().AddStringReference<std::decay_t<T>>(
-				SrcMonoObject, InMember, false);
+			FCSharpEnvironment::GetEnvironment().AddStringReference<std::decay_t<T>, false>(
+				SrcMonoObject, InMember);
 		}
 		else
 		{
-			FCSharpEnvironment::GetEnvironment().AddStringReference<std::decay_t<T>>(
-				SrcMonoObject, new std::decay_t<T>(*InMember), true);
+			FCSharpEnvironment::GetEnvironment().AddStringReference<std::decay_t<T>, true>(
+				SrcMonoObject, new std::decay_t<T>(*InMember));
 		}
 
 		return SrcMonoObject;
@@ -118,8 +118,8 @@ struct TMultiPropertyValue
 
 			SrcMonoObject = FCSharpEnvironment::GetEnvironment().GetDomain()->Object_New(FoundMonoClass);
 
-			FCSharpEnvironment::GetEnvironment().AddMultiReference<std::decay_t<T>>(
-				SrcMonoObject, InMember, false);
+			FCSharpEnvironment::GetEnvironment().AddMultiReference<std::decay_t<T>, false>(
+				SrcMonoObject, InMember);
 		}
 
 		return SrcMonoObject;
@@ -134,13 +134,13 @@ struct TMultiPropertyValue
 
 		if constexpr (bIsReference)
 		{
-			FCSharpEnvironment::GetEnvironment().AddMultiReference<std::decay_t<T>>(
-				SrcMonoObject, InMember, false);
+			FCSharpEnvironment::GetEnvironment().AddMultiReference<std::decay_t<T>, false>(
+				SrcMonoObject, InMember);
 		}
 		else
 		{
-			FCSharpEnvironment::GetEnvironment().AddMultiReference<std::decay_t<T>>(
-				SrcMonoObject, new std::decay_t<T>(*InMember), true);
+			FCSharpEnvironment::GetEnvironment().AddMultiReference<std::decay_t<T>, true>(
+				SrcMonoObject, new std::decay_t<T>(*InMember));
 		}
 
 		return SrcMonoObject;
@@ -181,13 +181,13 @@ struct TBindingPropertyValue<T, std::enable_if_t<!std::is_pointer_v<std::remove_
 
 		if constexpr (bIsReference)
 		{
-			FCSharpEnvironment::GetEnvironment().AddBindingReference(
-				SrcMonoObject, InMember, false);
+			FCSharpEnvironment::GetEnvironment().AddBindingReference<std::decay_t<T>, false>(
+				SrcMonoObject, InMember);
 		}
 		else
 		{
-			FCSharpEnvironment::GetEnvironment().AddBindingReference(
-				SrcMonoObject, new std::decay_t<T>(*InMember), true);
+			FCSharpEnvironment::GetEnvironment().AddBindingReference<std::decay_t<T>, true>(
+				SrcMonoObject, new std::decay_t<T>(*InMember));
 		}
 
 		return SrcMonoObject;
@@ -213,7 +213,7 @@ struct TBindingPropertyValue<T, std::enable_if_t<std::is_pointer_v<std::remove_r
 			SrcMonoObject = FCSharpEnvironment::GetEnvironment().GetDomain()->Object_New(FoundMonoClass);
 
 			FCSharpEnvironment::GetEnvironment().AddBindingReference(
-				InGarbageCollectionHandle, SrcMonoObject, *InMember, false);
+				InGarbageCollectionHandle, SrcMonoObject, *InMember);
 		}
 
 		return SrcMonoObject;
@@ -228,13 +228,13 @@ struct TBindingPropertyValue<T, std::enable_if_t<std::is_pointer_v<std::remove_r
 
 		if constexpr (bIsReference)
 		{
-			FCSharpEnvironment::GetEnvironment().AddBindingReference(
-				SrcMonoObject, *InMember, false);
+			FCSharpEnvironment::GetEnvironment().AddBindingReference<std::decay_t<T>, false>(
+				SrcMonoObject, InMember);
 		}
 		else
 		{
-			FCSharpEnvironment::GetEnvironment().AddBindingReference(
-				SrcMonoObject, new std::decay_t<T>(*InMember), true);
+			FCSharpEnvironment::GetEnvironment().AddBindingReference<std::decay_t<T>, true>(
+				SrcMonoObject, new std::decay_t<T>(*InMember));
 		}
 
 		return SrcMonoObject;
@@ -816,8 +816,8 @@ struct TPropertyValue<T, std::enable_if_t<std::is_same_v<std::remove_pointer_t<s
 
 		auto SubclassOf = new TSubclassOf<UObject>(*InMember);
 
-		FCSharpEnvironment::GetEnvironment().AddMultiReference<TSubclassOf<UObject>>(
-			SrcMonoObject, SubclassOf, true);
+		FCSharpEnvironment::GetEnvironment().AddMultiReference<TSubclassOf<UObject>, true>(
+			SrcMonoObject, SubclassOf);
 
 		return SrcMonoObject;
 	}
@@ -831,8 +831,8 @@ struct TPropertyValue<T, std::enable_if_t<std::is_same_v<std::remove_pointer_t<s
 
 		auto SubclassOf = new TSubclassOf<UObject>(*InMember);
 
-		FCSharpEnvironment::GetEnvironment().AddMultiReference<TSubclassOf<UObject>>(
-			SrcMonoObject, SubclassOf, true);
+		FCSharpEnvironment::GetEnvironment().AddMultiReference<TSubclassOf<UObject>, true>(
+			SrcMonoObject, SubclassOf);
 
 		return SrcMonoObject;
 	}

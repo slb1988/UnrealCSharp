@@ -34,13 +34,13 @@ struct FMultiRegistry::TMultiRegistryImplementation<
 			       : nullptr;
 	}
 
+	template<bool bNeedFree>
 	static bool AddReference(Class* InRegistry, MonoObject* InMonoObject,
-	                         typename FMultiValueMapping::FAddressType InAddress,
-	                         bool bNeedFree)
+	                         typename FMultiValueMapping::FAddressType InAddress)
 	{
 		const auto GarbageCollectionHandle = FGarbageCollectionHandle::NewWeakRef(InMonoObject, true);
 
-		if (bNeedFree == false)
+		if constexpr (bNeedFree == false)
 		{
 			(InRegistry->*Address2GarbageCollectionHandle).Add(InAddress, GarbageCollectionHandle);
 		}

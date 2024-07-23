@@ -186,8 +186,8 @@ public:
 	template <typename T>
 	auto GetMultiObject(void* InAddress) const;
 
-	template <typename T>
-	auto AddMultiReference(MonoObject* InMonoObject, void* InValue, bool bNeedFree) const;
+	template <typename T, bool bNeedFree>
+	auto AddMultiReference(MonoObject* InMonoObject, void* InValue) const;
 
 	template <typename T>
 	auto RemoveMultiReference(const FGarbageCollectionHandle& InGarbageCollectionHandle) const;
@@ -199,8 +199,8 @@ public:
 	template <typename T>
 	auto GetStringObject(void* InAddress) const;
 
-	template <typename T>
-	auto AddStringReference(MonoObject* InMonoObject, void* InValue, bool bNeedFree) const;
+	template <typename T, bool bNeedFree>
+	auto AddStringReference(MonoObject* InMonoObject, void* InValue) const;
 
 	template <typename T>
 	auto RemoveStringReference(const FGarbageCollectionHandle& InGarbageCollectionHandle) const;
@@ -211,8 +211,8 @@ public:
 	template <typename T>
 	auto GetBinding(const FGarbageCollectionHandle& InGarbageCollectionHandle) const;
 
-	template <typename T>
-	auto AddBindingReference(MonoObject* InMonoObject, const T* InObject, bool bNeedFree) const;
+	template <typename T, bool bNeedFree>
+	auto AddBindingReference(MonoObject* InMonoObject, const T* InObject) const;
 
 	template <typename T>
 	auto AddBindingReference(const FGarbageCollectionHandle& InOwner, MonoObject* InMonoObject,

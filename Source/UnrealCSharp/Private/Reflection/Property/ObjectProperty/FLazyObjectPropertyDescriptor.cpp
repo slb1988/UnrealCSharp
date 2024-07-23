@@ -45,7 +45,7 @@ MonoObject* FLazyObjectPropertyDescriptor::NewWeakRef(void* InAddress, const boo
 	{
 		const auto Object = FCSharpEnvironment::GetEnvironment().GetDomain()->Object_New(Class);
 		
-		FCSharpEnvironment::GetEnvironment().AddMultiReference<TLazyObjectPtr<UObject>>(Object, CopyValue(InAddress), true);
+		FCSharpEnvironment::GetEnvironment().AddMultiReference<TLazyObjectPtr<UObject>, true>(Object, CopyValue(InAddress));
 
 		return Object;
 	}
@@ -57,7 +57,7 @@ MonoObject* FLazyObjectPropertyDescriptor::NewWeakRef(void* InAddress, const boo
 		{
 			Object = FCSharpEnvironment::GetEnvironment().GetDomain()->Object_New(Class);
 
-			FCSharpEnvironment::GetEnvironment().AddMultiReference<TLazyObjectPtr<UObject>>(Object, InAddress, false);
+			FCSharpEnvironment::GetEnvironment().AddMultiReference<TLazyObjectPtr<UObject>, false>(Object, InAddress);
 		}
 
 		return Object;

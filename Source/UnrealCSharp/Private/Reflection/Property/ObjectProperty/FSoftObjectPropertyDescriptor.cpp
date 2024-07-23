@@ -48,7 +48,7 @@ MonoObject* FSoftObjectPropertyDescriptor::NewWeakRef(void* InAddress, const boo
 	{
 		const auto Object = FCSharpEnvironment::GetEnvironment().GetDomain()->Object_New(Class);
 		
-		FCSharpEnvironment::GetEnvironment().AddMultiReference<TSoftObjectPtr<UObject>>(Object, CopyValue(InAddress), true);
+		FCSharpEnvironment::GetEnvironment().AddMultiReference<TSoftObjectPtr<UObject>, true>(Object, CopyValue(InAddress));
 
 		return Object;
 	}
@@ -60,7 +60,7 @@ MonoObject* FSoftObjectPropertyDescriptor::NewWeakRef(void* InAddress, const boo
 		{
 			Object = FCSharpEnvironment::GetEnvironment().GetDomain()->Object_New(Class);
 
-			FCSharpEnvironment::GetEnvironment().AddMultiReference<TSoftObjectPtr<UObject>>(Object, InAddress, false);
+			FCSharpEnvironment::GetEnvironment().AddMultiReference<TSoftObjectPtr<UObject>, false>(Object, InAddress);
 		}
 
 		return Object;

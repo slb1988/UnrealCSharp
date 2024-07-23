@@ -46,7 +46,7 @@ MonoObject* FStrPropertyDescriptor::NewWeakRef(void* InAddress, const bool bIsCo
 	{
 		const auto Object = FCSharpEnvironment::GetEnvironment().GetDomain()->Object_New(Class);
 
-		FCSharpEnvironment::GetEnvironment().AddStringReference<FString>(Object, CopyValue(InAddress), true);
+		FCSharpEnvironment::GetEnvironment().AddStringReference<FString, true>(Object, CopyValue(InAddress));
 
 		return Object;
 	}
@@ -58,7 +58,7 @@ MonoObject* FStrPropertyDescriptor::NewWeakRef(void* InAddress, const bool bIsCo
 		{
 			Object = FCSharpEnvironment::GetEnvironment().GetDomain()->Object_New(Class);
 
-			FCSharpEnvironment::GetEnvironment().AddStringReference<FString>(Object, InAddress, false);
+			FCSharpEnvironment::GetEnvironment().AddStringReference<FString, false>(Object, InAddress);
 		}
 
 		return Object;

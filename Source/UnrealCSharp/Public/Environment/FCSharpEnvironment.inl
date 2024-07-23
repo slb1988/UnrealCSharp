@@ -183,11 +183,11 @@ auto FCSharpEnvironment::GetMultiObject(void* InAddress) const
 		       : nullptr;
 }
 
-template <typename T>
-auto FCSharpEnvironment::AddMultiReference(MonoObject* InMonoObject, void* InValue, const bool bNeedFree) const
+template <typename T, bool bNeedFree>
+auto FCSharpEnvironment::AddMultiReference(MonoObject* InMonoObject, void* InValue) const
 {
 	return MultiRegistry != nullptr
-		       ? FMultiRegistry::TMultiRegistry<T, T>::AddReference(MultiRegistry, InMonoObject, InValue, bNeedFree)
+		       ? FMultiRegistry::TMultiRegistry<T, T>::AddReference<bNeedFree>(MultiRegistry, InMonoObject, InValue)
 		       : false;
 }
 
@@ -215,11 +215,11 @@ auto FCSharpEnvironment::GetStringObject(void* InAddress) const
 		       : nullptr;
 }
 
-template <typename T>
-auto FCSharpEnvironment::AddStringReference(MonoObject* InMonoObject, void* InValue, const bool bNeedFree) const
+template <typename T, bool bNeedFree>
+auto FCSharpEnvironment::AddStringReference(MonoObject* InMonoObject, void* InValue) const
 {
 	return StringRegistry != nullptr
-		       ? FStringRegistry::TStringRegistry<T>::AddReference(StringRegistry, InMonoObject, InValue, bNeedFree)
+		       ? FStringRegistry::TStringRegistry<T>::AddReference<bNeedFree>(StringRegistry, InMonoObject, InValue)
 		       : false;
 }
 
@@ -239,10 +239,10 @@ auto FCSharpEnvironment::GetBinding(const FGarbageCollectionHandle& InGarbageCol
 		       : nullptr;
 }
 
-template <typename T>
-auto FCSharpEnvironment::AddBindingReference(MonoObject* InMonoObject, const T* InObject, const bool bNeedFree) const
+template <typename T, bool bNeedFree>
+auto FCSharpEnvironment::AddBindingReference(MonoObject* InMonoObject, const T* InObject) const
 {
-	return BindingRegistry != nullptr ? BindingRegistry->AddReference(InObject, InMonoObject, bNeedFree) : false;
+	return BindingRegistry != nullptr ? BindingRegistry->AddReference<T, bNeedFree>(InObject, InMonoObject) : false;
 }
 
 template <typename T>
