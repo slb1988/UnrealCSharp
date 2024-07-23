@@ -11,12 +11,12 @@ auto FBindingRegistry::GetBinding(const FGarbageCollectionHandle& InGarbageColle
 	return FoundValue != nullptr ? static_cast<T*>(FoundValue->AddressWrapper->GetValue()) : nullptr;
 }
 
-template <typename T>
-auto FBindingRegistry::AddReference(const T* InObject, MonoObject* InMonoObject, bool bNeedFree)
+template <typename T, bool bNeedFree>
+auto FBindingRegistry::AddReference(const T* InObject, MonoObject* InMonoObject)
 {
 	const auto GarbageCollectionHandle = FGarbageCollectionHandle::NewWeakRef(InMonoObject, true);
 
-	if (bNeedFree == false)
+	if constexpr (bNeedFree == false)
 	{
 		BindingAddress2GarbageCollectionHandle.Add(static_cast<void*>(const_cast<T*>(InObject)),
 		                                           GarbageCollectionHandle);

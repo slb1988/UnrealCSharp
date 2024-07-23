@@ -238,7 +238,7 @@ void FCSharpEnvironment::NotifyUObjectCreated(const UObjectBase* Object, int32 I
 
 		if (IsInGameThread())
 		{
-			Bind(InObject, true);
+			Bind(InObject, true,false);
 		}
 		else
 		{
@@ -337,7 +337,7 @@ void FCSharpEnvironment::OnAsyncLoadingFlushUpdate()
 		}
 		else
 		{
-			Bind(PendingBindObject, true);
+			Bind(PendingBindObject, true,false);
 		}
 
 		if (const auto FoundMonoObject = GetObject(PendingBindObject))
@@ -347,24 +347,20 @@ void FCSharpEnvironment::OnAsyncLoadingFlushUpdate()
 	}
 }
 
-MonoObject* FCSharpEnvironment::Bind(UObject* Object) const
+MonoObject* FCSharpEnvironment::Bind(const UObject* Object, const bool bIsWeak) const
 {
-	return FCSharpBind::Bind(Domain, Object);
+	// return Bind(const_cast<UObject*>(Object), bIsWeak);
+	return nullptr;
 }
 
-MonoObject* FCSharpEnvironment::Bind(const UObject* Object) const
+MonoObject* FCSharpEnvironment::Bind(UClass* Class, const bool bIsWeak) const
 {
-	return Bind(const_cast<UObject*>(Object));
+	return FCSharpBind::Bind(Domain, Class, bIsWeak);
 }
 
-MonoObject* FCSharpEnvironment::Bind(UClass* Class) const
+MonoObject* FCSharpEnvironment::Bind(UObject* Object, const bool bNeedMonoClass, const bool bIsWeak) const
 {
-	return FCSharpBind::Bind(Domain, Class);
-}
-
-bool FCSharpEnvironment::Bind(UObject* Object, const bool bNeedMonoClass) const
-{
-	return FCSharpBind::Bind(Domain, Object, bNeedMonoClass);
+	return FCSharpBind::Bind(Domain, Object, bNeedMonoClass, bIsWeak);
 }
 
 bool FCSharpEnvironment::Bind(UStruct* InStruct, const bool bNeedMonoClass) const
@@ -475,9 +471,9 @@ void FCSharpEnvironment::RemovePropertyDescriptor(const uint32 InPropertyHash) c
 	}
 }
 
-bool FCSharpEnvironment::AddObjectReference(UObject* InObject, MonoObject* InMonoObject) const
+bool FCSharpEnvironment::AddObjectReference(UObject* InObject, MonoObject* InMonoObject, const bool bIsWeak) const
 {
-	return ObjectRegistry != nullptr ? ObjectRegistry->AddReference(InObject, InMonoObject) : false;
+	return ObjectRegistry != nullptr ? ObjectRegistry->AddReference(InObject, InMonoObject, bIsWeak) : false;
 }
 
 MonoObject* FCSharpEnvironment::GetObject(const UObject* InObject) const

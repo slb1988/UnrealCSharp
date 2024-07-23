@@ -3,6 +3,20 @@
 #include "Environment/FCSharpEnvironment.h"
 #include "Bridge/FTypeBridge.h"
 
+template<bool bIsWeak>
+auto FCSharpBind::Bind(FDomain* InDomain, UObject* InObject)
+{
+	if constexpr (!bIsWeak)
+	{
+		if (const auto FoundMonoObject = FCSharpEnvironment::GetEnvironment().GetObject(InObject))
+		{
+			return FoundMonoObject;
+		}
+	}
+	
+	return Bind(InDomain, InObject, false, bIsWeak);
+}
+
 template <typename T>
 auto FCSharpBind::Bind(MonoObject* InMonoObject, MonoReflectionType* InReflectionType)
 {
@@ -29,7 +43,7 @@ auto FCSharpBind::BindImplementation(MonoObject* InMonoObject, MonoReflectionTyp
 
 	Property->SetPropertyFlags(CPF_HasGetValueTypeHash);
 
-	const auto ContainerHelper = new T(Property);
+	const auto ContainerHelper = new T(Property, nullptr, true, true);
 
 	FCSharpEnvironment::GetEnvironment().AddContainerReference(ContainerHelper, InMonoObject);
 
@@ -49,7 +63,7 @@ auto FCSharpBind::BindImplementation(MonoObject* InMonoObject, MonoReflectionTyp
 
 	ValueProperty->SetPropertyFlags(CPF_HasGetValueTypeHash);
 
-	const auto ContainerHelper = new T(KeyProperty, ValueProperty);
+	const auto ContainerHelper = new T(KeyProperty, ValueProperty, nullptr, true, true);
 
 	FCSharpEnvironment::GetEnvironment().AddContainerReference(ContainerHelper, InMonoObject);
 

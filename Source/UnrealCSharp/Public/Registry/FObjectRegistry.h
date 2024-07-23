@@ -36,7 +36,7 @@ public:
 	FGarbageCollectionHandle GetGarbageCollectionHandle(const UObject* InObject);
 
 public:
-	bool AddReference(UObject* InObject, MonoObject* InMonoObject);
+	bool AddReference(UObject* InObject, MonoObject* InMonoObject, bool bIsWeak);
 
 	bool RemoveReference(const UObject* InObject);
 

@@ -44,7 +44,13 @@ bool FBindingRegistry::RemoveReference(const FGarbageCollectionHandle& InGarbage
 {
 	if (const auto FoundValue = GarbageCollectionHandle2BindingAddress.Find(InGarbageCollectionHandle))
 	{
-		BindingAddress2GarbageCollectionHandle.Remove(FoundValue->AddressWrapper->GetValue());
+		if (const auto FoundGarbageCollectionHandle = BindingAddress2GarbageCollectionHandle.Find(FoundValue->AddressWrapper->GetValue()))
+		{
+			if (*FoundGarbageCollectionHandle == InGarbageCollectionHandle)
+			{
+				BindingAddress2GarbageCollectionHandle.Remove(FoundValue->AddressWrapper->GetValue());
+			}
+		}
 
 		if (FoundValue->bNeedFree)
 		{
