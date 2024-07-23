@@ -18,8 +18,10 @@ struct TIsRef
 			std::is_pointer_v<std::decay_t<T>> ||
 			TIsTArray<std::decay_t<T>>::Value ||
 			TIsTSet<std::decay_t<T>>::Value ||
-			TIsTMap<std::decay_t<T>>::Value ||
-			TIsTOptional<std::decay_t<T>>::Value
+			TIsTMap<std::decay_t<T>>::Value
+#if UE_F_OPTIONAL_PROPERTY
+			|| TIsTOptional<std::decay_t<T>>::Value
+#endif
 		)
 		{
 			return std::is_reference_v<T> && !std::is_const_v<std::remove_reference_t<T>>;
