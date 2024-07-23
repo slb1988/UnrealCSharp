@@ -2,21 +2,19 @@
 #include "Reflection/Property/FPropertyDescriptor.h"
 #include "CppVersion.h"
 
-FSetHelper::FSetHelper(FProperty* InProperty, void* InData, const bool InbNeedFree):
+FSetHelper::FSetHelper(FProperty* InProperty, void* InData,
+	const bool InbNeedFreeData,const bool InbNeedFreeProperty):
 	ElementPropertyDescriptor(nullptr),
 	ScriptSet(nullptr),
-	bNeedFree(false)
+bNeedFreeData(InbNeedFreeData),
+bNeedFreeProperty(InbNeedFreeProperty)
 {
 	if (InData != nullptr)
 	{
-		bNeedFree = InbNeedFree;
-
 		ScriptSet = static_cast<FScriptSet*>(InData);
 	}
 	else
 	{
-		bNeedFree = true;
-
 		ScriptSet = new FScriptSet();
 	}
 
@@ -40,19 +38,16 @@ void FSetHelper::Initialize()
 
 void FSetHelper::Deinitialize()
 {
-	if (bNeedFree && ScriptSet != nullptr)
+	if (bNeedFreeData && ScriptSet != nullptr)
 	{
 		delete ScriptSet;
 
 		ScriptSet = nullptr;
 	}
 
-	if (ElementPropertyDescriptor != nullptr)
+	if (bNeedFreeProperty && ElementPropertyDescriptor != nullptr)
 	{
-		if (bNeedFree)
-		{
-			ElementPropertyDescriptor->DestroyProperty();
-		}
+		ElementPropertyDescriptor->DestroyProperty();
 
 		delete ElementPropertyDescriptor;
 

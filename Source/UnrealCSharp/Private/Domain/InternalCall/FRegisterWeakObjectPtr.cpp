@@ -14,7 +14,7 @@ namespace
 			const auto WeakObjectPtr = new TWeakObjectPtr<UObject>(FoundObject);
 
 			FCSharpEnvironment::GetEnvironment().AddMultiReference<TWeakObjectPtr<UObject>>(
-				InMonoObject, WeakObjectPtr);
+				InMonoObject, WeakObjectPtr, true);
 		}
 
 		static bool IdenticalImplementation(const FGarbageCollectionHandle InA, const FGarbageCollectionHandle InB)
@@ -44,7 +44,7 @@ namespace
 			const auto Multi = FCSharpEnvironment::GetEnvironment()
 				.GetMulti<TWeakObjectPtr<UObject>>(InGarbageCollectionHandle);
 
-			return FCSharpEnvironment::GetEnvironment().Bind(Multi->Get());
+			return FCSharpEnvironment::GetEnvironment().Bind(Multi->Get(), true);
 		}
 
 		FRegisterWeakObjectPtr()

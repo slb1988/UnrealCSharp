@@ -46,13 +46,13 @@ public:
 	void OnAsyncLoadingFlushUpdate();
 
 public:
-	MonoObject* Bind(UObject* Object) const;
+	MonoObject* Bind(UObject* Object, bool bIsWeak) const;
 
-	MonoObject* Bind(const UObject* Object) const;
+	MonoObject* Bind(const UObject* Object, bool bIsWeak) const;
 
-	MonoObject* Bind(UClass* Class) const;
+	MonoObject* Bind(UClass* Class, bool bIsWeak) const;
 
-	bool Bind(UObject* Object, bool bNeedMonoClass) const;
+	MonoObject* Bind(UObject* Object, bool bNeedMonoClass, bool bIsWeak) const;
 
 	bool Bind(UStruct* InStruct, bool bNeedMonoClass) const;
 
@@ -96,7 +96,7 @@ public:
 	template <typename T, typename U>
 	auto GetAddress(const FGarbageCollectionHandle& InGarbageCollectionHandle) const;
 
-	bool AddObjectReference(UObject* InObject, MonoObject* InMonoObject) const;
+	bool AddObjectReference(UObject* InObject, MonoObject* InMonoObject, bool bIsWeak) const;
 
 	MonoObject* GetObject(const UObject* InObject) const;
 
@@ -108,7 +108,7 @@ public:
 	bool RemoveObjectReference(const FGarbageCollectionHandle& InGarbageCollectionHandle) const;
 
 	bool AddStructReference(UScriptStruct* InScriptStruct, const void* InStruct, MonoObject* InMonoObject,
-	                        bool bNeedFree = true) const;
+	                        bool bNeedFree) const;
 
 	bool AddStructReference(const FGarbageCollectionHandle& InOwner, UScriptStruct* InScriptStruct,
 	                        const void* InStruct, MonoObject* InMonoObject) const;
@@ -187,7 +187,7 @@ public:
 	auto GetMultiObject(void* InAddress) const;
 
 	template <typename T>
-	auto AddMultiReference(MonoObject* InMonoObject, void* InValue, bool bNeedFree = true) const;
+	auto AddMultiReference(MonoObject* InMonoObject, void* InValue, bool bNeedFree) const;
 
 	template <typename T>
 	auto RemoveMultiReference(const FGarbageCollectionHandle& InGarbageCollectionHandle) const;
@@ -200,7 +200,7 @@ public:
 	auto GetStringObject(void* InAddress) const;
 
 	template <typename T>
-	auto AddStringReference(MonoObject* InMonoObject, void* InValue, bool bNeedFree = true) const;
+	auto AddStringReference(MonoObject* InMonoObject, void* InValue, bool bNeedFree) const;
 
 	template <typename T>
 	auto RemoveStringReference(const FGarbageCollectionHandle& InGarbageCollectionHandle) const;
@@ -212,7 +212,7 @@ public:
 	auto GetBinding(const FGarbageCollectionHandle& InGarbageCollectionHandle) const;
 
 	template <typename T>
-	auto AddBindingReference(MonoObject* InMonoObject, const T* InObject, bool bNeedFree = true) const;
+	auto AddBindingReference(MonoObject* InMonoObject, const T* InObject, bool bNeedFree) const;
 
 	template <typename T>
 	auto AddBindingReference(const FGarbageCollectionHandle& InOwner, MonoObject* InMonoObject,
@@ -231,7 +231,7 @@ public:
 	auto AddOptionalReference(T* InValue, MonoObject* InMonoObject) const;
 
 	template <typename T>
-	auto AddOptionalReference(void* InAddress, T* InValue, MonoObject* InMonoObject, bool bNeedFree = true) const;
+	auto AddOptionalReference(void* InAddress, T* InValue, MonoObject* InMonoObject) const;
 
 	bool RemoveOptionalReference(const FGarbageCollectionHandle& InGarbageCollectionHandle) const;
 #endif

@@ -61,14 +61,11 @@ bool FOptionalRegistry::AddReference(const FOptionalHelperValueMapping::ValueTyp
 
 bool FOptionalRegistry::AddReference(const FOptionalHelperValueMapping::FAddressType& InAddress,
                                      const FOptionalHelperValueMapping::ValueType& InValue,
-                                     MonoObject* InMonoObject, const bool bNeedFree)
+                                     MonoObject* InMonoObject)
 {
 	const auto GarbageCollectionHandle = FGarbageCollectionHandle::NewWeakRef(InMonoObject, true);
 
-	if (bNeedFree == false)
-	{
-		OptionalAddress2GarbageCollectionHandle.Add(InAddress, GarbageCollectionHandle);
-	}
+	OptionalAddress2GarbageCollectionHandle.Add(InAddress, GarbageCollectionHandle);
 
 	OptionalGarbageCollectionHandle2Helper.Add(GarbageCollectionHandle, InValue);
 
@@ -79,10 +76,12 @@ bool FOptionalRegistry::RemoveReference(const FGarbageCollectionHandle& InGarbag
 {
 	if (const auto FoundValue = OptionalGarbageCollectionHandle2Helper.Find(InGarbageCollectionHandle))
 	{
-		if (const auto FoundAddress = OptionalAddress2GarbageCollectionHandle.FindKey(
-			InGarbageCollectionHandle))
+		if (const auto FoundGarbageCollectionHandle = OptionalAddress2GarbageCollectionHandle.Find(*FoundValue))
 		{
-			OptionalAddress2GarbageCollectionHandle.Remove(*FoundAddress);
+			if(*FoundGarbageCollectionHandle == InGarbageCollectionHandle)
+			{
+				OptionalAddress2GarbageCollectionHandle.Remove(*FoundValue);
+			}
 		}
 
 		delete *FoundValue;

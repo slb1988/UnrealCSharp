@@ -14,7 +14,7 @@ namespace
 			const auto SoftObjectPtr = new TSoftObjectPtr<UObject>(FoundObject);
 
 			FCSharpEnvironment::GetEnvironment().AddMultiReference<TSoftObjectPtr<UObject>>(
-				InMonoObject, SoftObjectPtr);
+				InMonoObject, SoftObjectPtr, true);
 		}
 
 		static bool IdenticalImplementation(const FGarbageCollectionHandle InA, const FGarbageCollectionHandle InB)
@@ -44,7 +44,7 @@ namespace
 			const auto Multi = FCSharpEnvironment::GetEnvironment().
 				GetMulti<TSoftObjectPtr<UObject>>(InGarbageCollectionHandle);
 
-			return FCSharpEnvironment::GetEnvironment().Bind(Multi->Get());
+			return FCSharpEnvironment::GetEnvironment().Bind(Multi->Get(), true);
 		}
 
 		static MonoObject* LoadSynchronousImplementation(const FGarbageCollectionHandle InGarbageCollectionHandle)
@@ -52,7 +52,7 @@ namespace
 			const auto Multi = FCSharpEnvironment::GetEnvironment().
 				GetMulti<TSoftObjectPtr<UObject>>(InGarbageCollectionHandle);
 
-			return FCSharpEnvironment::GetEnvironment().Bind(Multi->LoadSynchronous());
+			return FCSharpEnvironment::GetEnvironment().Bind(Multi->LoadSynchronous(), true);
 		}
 
 		FRegisterSoftObjectPtr()

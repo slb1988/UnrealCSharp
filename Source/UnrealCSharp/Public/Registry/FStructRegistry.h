@@ -64,7 +64,7 @@ public:
 
 public:
 	bool AddReference(UScriptStruct* InScriptStruct, const void* InStruct, MonoObject* InMonoObject,
-	                  bool bNeedFree = true);
+	                  bool bNeedFree);
 
 	bool AddReference(const FGarbageCollectionHandle& InOwner, UScriptStruct* InScriptStruct, const void* InStruct,
 	                  MonoObject* InMonoObject);

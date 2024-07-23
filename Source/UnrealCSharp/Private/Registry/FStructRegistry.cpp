@@ -122,11 +122,19 @@ bool FStructRegistry::RemoveReference(const FGarbageCollectionHandle& InGarbageC
 {
 	if (const auto FoundValue = GarbageCollectionHandle2StructAddress.Find(InGarbageCollectionHandle))
 	{
-		(void)FCSharpEnvironment::GetEnvironment().RemoveReference(InGarbageCollectionHandle);
+		if (const auto FoundGarbageCollectionHandle = StructAddress2GarbageCollectionHandle.Find(
+			{FoundValue->Value.Get(), FoundValue->Address}))
+		{
+			if(*FoundGarbageCollectionHandle == InGarbageCollectionHandle)
+			{
+				FGarbageCollectionHandle::Free(*FoundGarbageCollectionHandle, false);
+				
+				(void)FCSharpEnvironment::GetEnvironment().RemoveReference(InGarbageCollectionHandle);
 
-		StructAddress2GarbageCollectionHandle.Remove({
-			FoundValue->Value.Get(), FoundValue->Address
-		});
+				StructAddress2GarbageCollectionHandle.Remove(
+					{FoundValue->Value.Get(), FoundValue->Address});
+			}
+		}
 
 		if (FoundValue->bNeedFree)
 		{

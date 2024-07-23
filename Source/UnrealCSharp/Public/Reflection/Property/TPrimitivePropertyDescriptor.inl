@@ -12,19 +12,9 @@ public:
 	using Super = TPropertyDescriptor<T, true>;
 
 public:
-	virtual void Get(void* Src, void** Dest) const override
+	virtual void Get(void* Src, void** Dest, bool bIsCopy) const override
 	{
 		*Dest = static_cast<void*>(FCSharpEnvironment::GetEnvironment().GetDomain()->Value_Box(Super::Class, Src));
-	}
-
-	virtual void DestroyProperty() override
-	{
-		if (Super::Property != nullptr)
-		{
-			delete Super::Property;
-
-			Super::Property = nullptr;
-		}
 	}
 
 	virtual void Get(void* Src, void* Dest) const override
@@ -42,6 +32,16 @@ public:
 			Super::Property->InitializeValue(Dest);
 
 			Super::Property->CopySingleValue(Dest, Src);
+		}
+	}
+
+	virtual void DestroyProperty() override
+	{
+		if (Super::Property != nullptr)
+		{
+			delete Super::Property;
+
+			Super::Property = nullptr;
 		}
 	}
 };

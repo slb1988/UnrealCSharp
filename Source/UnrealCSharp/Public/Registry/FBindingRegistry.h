@@ -82,7 +82,7 @@ public:
 
 public:
 	template <typename T>
-	auto AddReference(const T* InObject, MonoObject* InMonoObject, bool bNeedFree = true);
+	auto AddReference(const T* InObject, MonoObject* InMonoObject, bool bNeedFree);
 
 	template <typename T>
 	auto AddReference(const FGarbageCollectionHandle& InOwner, const T* InObject, MonoObject* InMonoObject);

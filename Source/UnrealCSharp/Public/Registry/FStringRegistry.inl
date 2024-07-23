@@ -36,7 +36,7 @@ struct FStringRegistry::TStringRegistryImplementation<
 
 	static bool AddReference(Class* InRegistry, MonoObject* InMonoObject,
 	                         typename FStringValueMapping::FAddressType InAddress,
-	                         bool bNeedFree = true)
+	                         bool bNeedFree)
 	{
 		const auto GarbageCollectionHandle = FGarbageCollectionHandle::NewWeakRef(InMonoObject, true);
 
@@ -57,15 +57,19 @@ struct FStringRegistry::TStringRegistryImplementation<
 	{
 		if (const auto FoundValue = (InRegistry->*GarbageCollectionHandle2Value).Find(InGarbageCollectionHandle))
 		{
+			if (const auto FoundGarbageCollectionHandle = (InRegistry->*Address2GarbageCollectionHandle).Find(FoundValue->Value))
+			{
+				if (*FoundGarbageCollectionHandle == InGarbageCollectionHandle)
+				{
+					(InRegistry->*Address2GarbageCollectionHandle).Remove(FoundValue->Value);
+				}
+			}
+			
 			if (FoundValue->bNeedFree)
 			{
 				FMemory::Free(FoundValue->Value);
 
 				FoundValue->Value = nullptr;
-			}
-			else
-			{
-				(InRegistry->*Address2GarbageCollectionHandle).Remove(FoundValue->Value);
 			}
 
 			(InRegistry->*GarbageCollectionHandle2Value).Remove(InGarbageCollectionHandle);

@@ -240,9 +240,9 @@ auto FCSharpEnvironment::GetBinding(const FGarbageCollectionHandle& InGarbageCol
 }
 
 template <typename T>
-auto FCSharpEnvironment::AddBindingReference(MonoObject* InMonoObject, const T* InObject, bool bNeedFree) const
+auto FCSharpEnvironment::AddBindingReference(MonoObject* InMonoObject, const T* InObject, const bool bNeedFree) const
 {
-	return BindingRegistry != nullptr ? BindingRegistry->AddReference(InObject, InMonoObject) : false;
+	return BindingRegistry != nullptr ? BindingRegistry->AddReference(InObject, InMonoObject, bNeedFree) : false;
 }
 
 template <typename T>
@@ -270,11 +270,10 @@ auto FCSharpEnvironment::AddOptionalReference(T* InValue, MonoObject* InMonoObje
 }
 
 template <typename T>
-auto FCSharpEnvironment::AddOptionalReference(void* InAddress, T* InValue, MonoObject* InMonoObject,
-                                              const bool bNeedFree) const
+auto FCSharpEnvironment::AddOptionalReference(void* InAddress, T* InValue, MonoObject* InMonoObject) const
 {
 	return OptionalRegistry != nullptr
-		       ? OptionalRegistry->AddReference(InAddress, InValue, InMonoObject, bNeedFree)
+		       ? OptionalRegistry->AddReference(InAddress, InValue, InMonoObject)
 		       : false;
 }
 #endif

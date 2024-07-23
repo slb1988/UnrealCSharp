@@ -20,7 +20,7 @@ struct TBaseReturnValue
 	}
 
 	explicit TBaseReturnValue(Type&& InValue):
-		Object{TPropertyValue<Type, Type>::Get(const_cast<std::decay_t<T>*>(&InValue))}
+		Object{TPropertyValue<Type, Type>::Get<TTypeInfo<T>::IsReference()>(const_cast<std::decay_t<T>*>(&InValue))}
 	{
 	}
 
@@ -44,21 +44,7 @@ template <typename T>
 struct TCompoundReturnValue :
 	TBaseReturnValue<T>
 {
-	using Super = TBaseReturnValue<T>;
-
-	using Type = typename Super::Type;
-
-	explicit TCompoundReturnValue(Type&& InValue)
-	{
-		if constexpr (TTypeInfo<T>::IsReference() || std::is_pointer_v<T>)
-		{
-			Super::Object = TPropertyValue<Type, Type>::Get(const_cast<std::decay_t<T>*>(&InValue));
-		}
-		else
-		{
-			Super::Object = TPropertyValue<Type, Type>::Get(new Type(InValue));
-		}
-	}
+	using TBaseReturnValue<T>::TBaseReturnValue;
 };
 
 template <typename T>
@@ -308,3 +294,12 @@ struct TReturnValue<T, std::enable_if_t<TIsTSoftClassPtr<std::decay_t<T>>::Value
 {
 	using TMultiReturnValue<T>::TMultiReturnValue;
 };
+
+#if UE_F_OPTIONAL_PROPERTY
+template <typename T>
+struct TReturnValue<T, std::enable_if_t<TIsTOptional<std::decay_t<T>>::Value>> :
+	TCompoundReturnValue<T>
+{
+	using TCompoundReturnValue<T>::TCompoundReturnValue;
+};
+#endif

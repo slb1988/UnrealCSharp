@@ -63,10 +63,12 @@ struct FContainerRegistry::TContainerRegistryImplementation<
 	{
 		if (const auto FoundValue = (InRegistry->*GarbageCollectionHandle2Value).Find(InGarbageCollectionHandle))
 		{
-			if (const auto FoundAddress = (InRegistry->*Address2GarbageCollectionHandle).FindKey(
-				InGarbageCollectionHandle))
+			if (const auto FoundGarbageCollectionHandle = (InRegistry->*Address2GarbageCollectionHandle).Find(*FoundValue))
 			{
-				(InRegistry->*Address2GarbageCollectionHandle).Remove(*FoundAddress);
+				if (*FoundGarbageCollectionHandle == InGarbageCollectionHandle)
+				{
+					(InRegistry->*Address2GarbageCollectionHandle).Remove(*FoundValue);
+				}
 			}
 
 			delete *FoundValue;

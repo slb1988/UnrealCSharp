@@ -16,11 +16,11 @@ public:
 	void Deinitialize();
 
 public:
-	static MonoObject* Bind(FDomain* InDomain, UObject* InObject);
+	static MonoObject* Bind(FDomain* InDomain, UObject* InObject, bool bIsWeak);
 
-	static MonoObject* Bind(FDomain* InDomain, UClass* InClass);
+	static MonoObject* Bind(FDomain* InDomain, UClass* InClass, bool bIsWeak);
 
-	static bool Bind(FDomain* InDomain, UObject* InObject, bool bNeedMonoClass);
+	static MonoObject* Bind(FDomain* InDomain, UObject* InObject, bool bNeedMonoClass, bool bIsWeak);
 
 	static bool Bind(FDomain* InDomain, UStruct* InStruct, bool bNeedMonoClass);
 
@@ -42,7 +42,7 @@ public:
 	static bool BindClassDefaultObject(FDomain* InDomain, UObject* InObject);
 
 private:
-	static bool BindImplementation(FDomain* InDomain, UObject* InObject, bool bNeedMonoClass);
+	static MonoObject* BindImplementation(FDomain* InDomain, UObject* InObject, bool bNeedMonoClass, bool bIsWeak);
 
 	static bool BindImplementation(FDomain* InDomain, UStruct* InStruct);
 
