@@ -347,17 +347,6 @@ void FCSharpEnvironment::OnAsyncLoadingFlushUpdate()
 	}
 }
 
-MonoObject* FCSharpEnvironment::Bind(const UObject* Object, const bool bIsWeak) const
-{
-	// return Bind(const_cast<UObject*>(Object), bIsWeak);
-	return nullptr;
-}
-
-MonoObject* FCSharpEnvironment::Bind(UClass* Class, const bool bIsWeak) const
-{
-	return FCSharpBind::Bind(Domain, Class, bIsWeak);
-}
-
 MonoObject* FCSharpEnvironment::Bind(UObject* Object, const bool bNeedMonoClass, const bool bIsWeak) const
 {
 	return FCSharpBind::Bind(Domain, Object, bNeedMonoClass, bIsWeak);

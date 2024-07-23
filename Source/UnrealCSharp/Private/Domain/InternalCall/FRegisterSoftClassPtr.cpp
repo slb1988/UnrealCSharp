@@ -44,7 +44,7 @@ namespace
 			const auto Multi = FCSharpEnvironment::GetEnvironment().GetMulti<TSoftClassPtr<UObject>>(
 				InGarbageCollectionHandle);
 
-			return FCSharpEnvironment::GetEnvironment().Bind(Multi->Get(), true);
+			return FCSharpEnvironment::GetEnvironment().Bind<true>(Multi->Get());
 		}
 
 		static MonoObject* LoadSynchronousImplementation(const FGarbageCollectionHandle InGarbageCollectionHandle)
@@ -52,7 +52,7 @@ namespace
 			const auto Multi = FCSharpEnvironment::GetEnvironment().GetMulti<TSoftClassPtr<UObject>>(
 				InGarbageCollectionHandle);
 
-			return FCSharpEnvironment::GetEnvironment().Bind(Multi->LoadSynchronous(), true);
+			return FCSharpEnvironment::GetEnvironment().Bind<true>(Multi->LoadSynchronous());
 		}
 
 		FRegisterSoftClassPtr()

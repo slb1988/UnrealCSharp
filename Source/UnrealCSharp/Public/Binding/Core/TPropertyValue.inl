@@ -436,8 +436,8 @@ struct TPropertyValue<T,
 	template <bool bIsReference>
 	static MonoObject* Get(std::decay_t<T>* InMember)
 	{
-		return FCSharpEnvironment::GetEnvironment().Bind(
-			std::add_pointer_t<std::remove_const_t<std::remove_pointer_t<std::decay_t<T>>>>(*InMember), true);
+		return FCSharpEnvironment::GetEnvironment().Bind<true>(
+			std::add_pointer_t<std::remove_const_t<std::remove_pointer_t<std::decay_t<T>>>>(*InMember));
 	}
 
 	static std::decay_t<T> Set(const FGarbageCollectionHandle InValue)

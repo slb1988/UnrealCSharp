@@ -14,6 +14,18 @@ auto FCSharpEnvironment::Bind(UObject* Object) const
 	return FCSharpBind::Bind<bIsWeak>(Domain, Object);
 }
 
+template <bool bIsWeak>
+auto FCSharpEnvironment::Bind(const UObject* Object) const
+{
+	return Bind<bIsWeak>(const_cast<UObject*>(Object), bIsWeak);
+}
+
+template <bool bIsWeak>
+auto FCSharpEnvironment::Bind(UClass* Class) const
+{
+	return FCSharpBind::Bind(Domain, Class, bIsWeak);
+}
+
 template <typename T>
 T* FCSharpEnvironment::TGetAddress<UObject, T>::operator()(const FCSharpEnvironment* InEnvironment,
                                                            const FGarbageCollectionHandle& InGarbageCollectionHandle)

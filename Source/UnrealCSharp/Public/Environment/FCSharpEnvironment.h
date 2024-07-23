@@ -49,9 +49,11 @@ public:
 	template<bool bIsWeak>
 	auto Bind(UObject* Object) const;
 
-	MonoObject* Bind(const UObject* Object, bool bIsWeak) const;
+	template<bool bIsWeak>
+	auto Bind(const UObject* Object) const;
 
-	MonoObject* Bind(UClass* Class, bool bIsWeak) const;
+	template<bool bIsWeak>
+	auto Bind(UClass* Class) const;
 
 	MonoObject* Bind(UObject* Object, bool bNeedMonoClass, bool bIsWeak) const;
 

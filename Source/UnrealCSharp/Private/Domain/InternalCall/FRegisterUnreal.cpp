@@ -127,7 +127,7 @@ namespace
 			                                      ObjectSandbox
 			);
 
-			return FCSharpEnvironment::GetEnvironment().Bind(Class, true);
+			return FCSharpEnvironment::GetEnvironment().Bind<true>(Class);
 		}
 
 		static MonoObject* CreateWidgetImplementation(const FGarbageCollectionHandle InOwningObject,

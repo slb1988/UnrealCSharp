@@ -44,7 +44,7 @@ namespace
 			const auto Multi = FCSharpEnvironment::GetEnvironment().GetMulti<TSubclassOf<UObject>>(
 				InGarbageCollectionHandle);
 
-			return FCSharpEnvironment::GetEnvironment().Bind(Multi->Get(), true);
+			return FCSharpEnvironment::GetEnvironment().Bind<true>(Multi->Get());
 		}
 
 		FRegisterSubclassOf()
