@@ -14,7 +14,7 @@ namespace
 
 			const auto InStruct = LoadObject<UScriptStruct>(nullptr, StructName.Get());
 
-			return FCSharpEnvironment::GetEnvironment().Bind(InStruct, false, false);
+			return FCSharpEnvironment::GetEnvironment().Bind<false>(InStruct, false);
 		}
 
 		static void RegisterImplementation(MonoObject* InMonoObject, MonoString* InStructName)

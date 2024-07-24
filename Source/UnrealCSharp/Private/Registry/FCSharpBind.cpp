@@ -37,26 +37,6 @@ void FCSharpBind::Deinitialize()
 	}
 }
 
-MonoObject* FCSharpBind::Bind(FDomain* InDomain, UClass* InClass, const bool bIsWeak)
-{
-	Bind(InDomain, static_cast<UStruct*>(InClass), false);
-
-	// @TODO
-	if(bIsWeak)
-	{
-		return Bind<true>(InDomain, static_cast<UObject*>(InClass));
-	}
-	else
-	{
-		return Bind<false>(InDomain, static_cast<UObject*>(InClass));
-	}
-}
-
-MonoObject* FCSharpBind::Bind(FDomain* InDomain, UObject* InObject, const bool bNeedMonoClass, const bool bIsWeak)
-{
-	return BindImplementation(InDomain, InObject, bNeedMonoClass, bIsWeak);
-}
-
 bool FCSharpBind::Bind(FDomain* InDomain, UStruct* InStruct, const bool bNeedMonoClass)
 {
 	if (FCSharpEnvironment::GetEnvironment().GetClassDescriptor(InStruct))
@@ -81,10 +61,9 @@ bool FCSharpBind::Bind(FDomain* InDomain, MonoObject* InMonoObject, const FName&
 	return BindImplementation(InDomain, InMonoObject, InStructName);
 }
 
-bool FCSharpBind::Bind(FClassDescriptor* InClassDescriptor, UClass* InClass, const FString& InName,
-                       UFunction* InFunction)
+bool FCSharpBind::Bind(FClassDescriptor* InClassDescriptor, UClass* InClass, UFunction* InFunction)
 {
-	return BindImplementation(InClassDescriptor, InClass, InName, InFunction);
+	return BindImplementation(InClassDescriptor, InClass, InFunction);
 }
 
 bool FCSharpBind::BindClassDefaultObject(FDomain* InDomain, UObject* InObject)
@@ -105,53 +84,13 @@ bool FCSharpBind::BindClassDefaultObject(FDomain* InDomain, UObject* InObject)
 			{
 				if (InObject->IsA(BindClass.Class))
 				{
-					return BindClass.bNeedMonoClass ? false : !!Bind(InDomain, InObject, false, false);
+					return BindClass.bNeedMonoClass ? false : !!Bind<false>(InDomain, InObject, false);
 				}
 			}
 		}
 	}
 
 	return false;
-}
-
-MonoObject* FCSharpBind::BindImplementation(FDomain* InDomain, UObject* InObject, const bool bNeedMonoClass, const bool bIsWeak)
-{
-	if (InDomain == nullptr || InObject == nullptr)
-	{
-		return nullptr;
-	}
-
-	const auto InClass = InObject->GetClass();
-
-	if (InClass == nullptr)
-	{
-		return nullptr;
-	}
-
-	if (!Bind(InDomain, static_cast<UStruct*>(InClass), bNeedMonoClass))
-	{
-		return nullptr;
-	}
-
-	const auto FoundClassDescriptor = FCSharpEnvironment::GetEnvironment().GetClassDescriptor(InClass);
-
-	if (FoundClassDescriptor == nullptr)
-	{
-		return nullptr;
-	}
-
-	const auto FoundMonoClass = FoundClassDescriptor->GetMonoClass();
-
-	if (FoundMonoClass == nullptr)
-	{
-		return nullptr;
-	}
-
-	const auto NewMonoObject = InDomain->Object_New(FoundMonoClass);
-
-	FCSharpEnvironment::GetEnvironment().AddObjectReference(InObject, NewMonoObject, bIsWeak);
-
-	return NewMonoObject;
 }
 
 bool FCSharpBind::BindImplementation(FDomain* InDomain, UStruct* InStruct)
@@ -291,7 +230,7 @@ bool FCSharpBind::BindImplementation(FDomain* InDomain, UStruct* InStruct)
 					if (IsOverrideMethod(InDomain,
 					                     InDomain->Method_Get_Object(FoundMonoMethod, FoundMonoClass)))
 					{
-						Bind(NewClassDescriptor, InClass, FunctionPair.Key, FunctionPair.Value);
+						Bind(NewClassDescriptor, InClass, FunctionPair.Value);
 					}
 				}
 			}
@@ -301,8 +240,7 @@ bool FCSharpBind::BindImplementation(FDomain* InDomain, UStruct* InStruct)
 	return true;
 }
 
-bool FCSharpBind::BindImplementation(FClassDescriptor* InClassDescriptor, UClass* InClass, const FString& InName,
-                                     UFunction* InFunction)
+bool FCSharpBind::BindImplementation(FClassDescriptor* InClassDescriptor, UClass* InClass, UFunction* InFunction)
 {
 	if (InClassDescriptor == nullptr || InClass == nullptr || InFunction == nullptr)
 	{

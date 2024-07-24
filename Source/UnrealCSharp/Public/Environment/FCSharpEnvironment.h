@@ -55,7 +55,8 @@ public:
 	template<bool bIsWeak>
 	auto Bind(UClass* Class) const;
 
-	MonoObject* Bind(UObject* Object, bool bNeedMonoClass, bool bIsWeak) const;
+	template<bool bIsWeak>
+	auto Bind(UObject* Object, bool bNeedMonoClass) const;
 
 	bool Bind(UStruct* InStruct, bool bNeedMonoClass) const;
 
@@ -99,7 +100,8 @@ public:
 	template <typename T, typename U>
 	auto GetAddress(const FGarbageCollectionHandle& InGarbageCollectionHandle) const;
 
-	bool AddObjectReference(UObject* InObject, MonoObject* InMonoObject, bool bIsWeak) const;
+	template<bool bIsWeak>
+	auto AddObjectReference(UObject* InObject, MonoObject* InMonoObject) const;
 
 	MonoObject* GetObject(const UObject* InObject) const;
 

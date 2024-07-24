@@ -23,7 +23,13 @@ auto FCSharpEnvironment::Bind(const UObject* Object) const
 template <bool bIsWeak>
 auto FCSharpEnvironment::Bind(UClass* Class) const
 {
-	return FCSharpBind::Bind(Domain, Class, bIsWeak);
+	return FCSharpBind::Bind<bIsWeak>(Domain, Class);
+}
+
+template <bool bIsWeak>
+auto FCSharpEnvironment::Bind(UObject* Object, const bool bNeedMonoClass) const
+{
+	return FCSharpBind::Bind<bIsWeak>(Domain, Object, bNeedMonoClass);
 }
 
 template <typename T>
@@ -62,6 +68,12 @@ template <typename T, typename U>
 auto FCSharpEnvironment::GetAddress(const FGarbageCollectionHandle& InGarbageCollectionHandle) const
 {
 	return TGetAddress<T, U>()(this, InGarbageCollectionHandle);
+}
+
+template<bool bIsWeak>
+auto FCSharpEnvironment::AddObjectReference(UObject* InObject, MonoObject* InMonoObject) const
+{
+	return ObjectRegistry != nullptr ? ObjectRegistry->AddReference<bIsWeak>(InObject, InMonoObject) : false;
 }
 
 template <>
