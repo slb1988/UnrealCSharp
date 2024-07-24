@@ -16,7 +16,7 @@ auto FBindingRegistry::AddReference(const T* InObject, MonoObject* InMonoObject)
 {
 	const auto GarbageCollectionHandle = FGarbageCollectionHandle::NewWeakRef(InMonoObject, true);
 
-	if constexpr (bNeedFree == false)
+	if constexpr (!bNeedFree)
 	{
 		BindingAddress2GarbageCollectionHandle.Add(static_cast<void*>(const_cast<T*>(InObject)),
 		                                           GarbageCollectionHandle);

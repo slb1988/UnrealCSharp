@@ -40,7 +40,7 @@ struct FStringRegistry::TStringRegistryImplementation<
 	{
 		const auto GarbageCollectionHandle = FGarbageCollectionHandle::NewWeakRef(InMonoObject, true);
 
-		if constexpr (bNeedFree == false)
+		if constexpr (!bNeedFree)
 		{
 			(InRegistry->*Address2GarbageCollectionHandle).Add(InAddress, GarbageCollectionHandle);
 		}
