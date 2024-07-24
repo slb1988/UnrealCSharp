@@ -4,7 +4,7 @@
 FStructPropertyDescriptor::FStructPropertyDescriptor(FStructProperty* InProperty):
 	TCompoundPropertyDescriptor(InProperty)
 {
-	FCSharpEnvironment::GetEnvironment().Bind(InProperty->Struct, false);
+	FCSharpEnvironment::GetEnvironment().Bind<false>(InProperty->Struct);
 }
 
 void FStructPropertyDescriptor::Get(void* Src, void** Dest, const bool bIsCopy) const

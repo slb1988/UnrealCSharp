@@ -22,10 +22,11 @@ public:
 	template<bool bIsWeak>
 	static auto Bind(FDomain* InDomain, UClass* InClass);
 
-	template<bool bIsWeak>
-	static auto Bind(FDomain* InDomain, UObject* InObject, bool bNeedMonoClass);
+	template<bool bIsWeak, bool bNeedMonoClass>
+	static auto Bind(FDomain* InDomain, UObject* InObject);
 
-	static bool Bind(FDomain* InDomain, UStruct* InStruct, bool bNeedMonoClass);
+	template<bool bNeedMonoClass>
+	static auto Bind(FDomain* InDomain, UStruct* InStruct);
 
 	template <typename T>
 	static auto Bind(MonoObject* InMonoObject, MonoReflectionType* InReflectionType);
@@ -44,8 +45,8 @@ public:
 	static bool BindClassDefaultObject(FDomain* InDomain, UObject* InObject);
 
 private:
-	template <bool bIsWeak>
-	static MonoObject* BindImplementation(FDomain* InDomain, UObject* InObject, bool bNeedMonoClass);
+	template <bool bIsWeak, bool bNeedMonoClass>
+	static MonoObject* BindImplementation(FDomain* InDomain, UObject* InObject);
 
 	static bool BindImplementation(FDomain* InDomain, UStruct* InStruct);
 

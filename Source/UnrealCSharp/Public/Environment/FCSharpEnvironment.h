@@ -55,10 +55,11 @@ public:
 	template<bool bIsWeak>
 	auto Bind(UClass* Class) const;
 
-	template<bool bIsWeak>
-	auto Bind(UObject* Object, bool bNeedMonoClass) const;
+	template<bool bIsWeak, bool bNeedMonoClass>
+	auto Bind(UObject* Object) const;
 
-	bool Bind(UStruct* InStruct, bool bNeedMonoClass) const;
+	template<bool bNeedMonoClass>
+	bool Bind(UStruct* InStruct) const;
 
 	bool Bind(MonoObject* InMonoObject, const FName& InStructName) const;
 

@@ -238,7 +238,7 @@ void FCSharpEnvironment::NotifyUObjectCreated(const UObjectBase* Object, int32 I
 
 		if (IsInGameThread())
 		{
-			Bind<false>(InObject, true);
+			Bind<false, true>(InObject);
 		}
 		else
 		{
@@ -337,7 +337,7 @@ void FCSharpEnvironment::OnAsyncLoadingFlushUpdate()
 		}
 		else
 		{
-			Bind<false>(PendingBindObject, true);
+			Bind<false, true>(PendingBindObject);
 		}
 
 		if (const auto FoundMonoObject = GetObject(PendingBindObject))
@@ -345,11 +345,6 @@ void FCSharpEnvironment::OnAsyncLoadingFlushUpdate()
 			FDomain::Object_Constructor(FoundMonoObject);
 		}
 	}
-}
-
-bool FCSharpEnvironment::Bind(UStruct* InStruct, const bool bNeedMonoClass) const
-{
-	return FCSharpBind::Bind(Domain, InStruct, bNeedMonoClass);
 }
 
 bool FCSharpEnvironment::Bind(MonoObject* InMonoObject, const FName& InStructName) const

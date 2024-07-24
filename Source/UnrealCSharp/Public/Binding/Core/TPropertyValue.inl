@@ -261,7 +261,7 @@ struct TScriptStructPropertyValue<T, std::enable_if_t<!std::is_pointer_v<std::re
 
 			SrcMonoObject = FCSharpEnvironment::GetEnvironment().GetDomain()->Object_New(FoundMonoClass);
 
-			FCSharpEnvironment::GetEnvironment().Bind(TBaseStructure<std::decay_t<T>>::Get(), false);
+			FCSharpEnvironment::GetEnvironment().Bind<false>(TBaseStructure<std::decay_t<T>>::Get());
 
 			FCSharpEnvironment::GetEnvironment().AddStructReference(
 				InGarbageCollectionHandle, TBaseStructure<std::decay_t<T>>::Get(), InMember, SrcMonoObject);
@@ -277,7 +277,7 @@ struct TScriptStructPropertyValue<T, std::enable_if_t<!std::is_pointer_v<std::re
 
 		auto SrcMonoObject = FCSharpEnvironment::GetEnvironment().GetDomain()->Object_New(FoundMonoClass);
 
-		FCSharpEnvironment::GetEnvironment().Bind(TBaseStructure<std::decay_t<T>>::Get(), false);
+		FCSharpEnvironment::GetEnvironment().Bind<false>(TBaseStructure<std::decay_t<T>>::Get());
 
 		if constexpr (bIsReference)
 		{
@@ -313,8 +313,8 @@ struct TScriptStructPropertyValue<T, std::enable_if_t<std::is_pointer_v<std::rem
 		{
 			SrcMonoObject = FCSharpEnvironment::GetEnvironment().GetDomain()->Object_New(FoundMonoClass);
 
-			FCSharpEnvironment::GetEnvironment().Bind(
-				TBaseStructure<std::decay_t<std::remove_pointer_t<T>>>::Get(), false);
+			FCSharpEnvironment::GetEnvironment().Bind<false>(
+				TBaseStructure<std::decay_t<std::remove_pointer_t<T>>>::Get());
 
 			FCSharpEnvironment::GetEnvironment().AddStructReference(
 				InGarbageCollectionHandle, TBaseStructure<std::decay_t<std::remove_pointer_t<T>>>::Get(),
@@ -331,8 +331,8 @@ struct TScriptStructPropertyValue<T, std::enable_if_t<std::is_pointer_v<std::rem
 
 		auto SrcMonoObject = FCSharpEnvironment::GetEnvironment().GetDomain()->Object_New(FoundMonoClass);
 
-		FCSharpEnvironment::GetEnvironment().Bind(
-			TBaseStructure<std::decay_t<std::remove_pointer_t<T>>>::Get(), false);
+		FCSharpEnvironment::GetEnvironment().Bind<false>(
+			TBaseStructure<std::decay_t<std::remove_pointer_t<T>>>::Get());
 
 		if constexpr (bIsReference)
 		{
@@ -491,7 +491,7 @@ struct TPropertyValue<T, std::enable_if_t<TIsUStruct<std::decay_t<T>>::Value, T>
 
 			SrcMonoObject = FCSharpEnvironment::GetEnvironment().GetDomain()->Object_New(FoundMonoClass);
 
-			FCSharpEnvironment::GetEnvironment().Bind(std::decay_t<T>::StaticStruct(), false);
+			FCSharpEnvironment::GetEnvironment().Bind<false>(std::decay_t<T>::StaticStruct());
 
 			FCSharpEnvironment::GetEnvironment().AddStructReference(
 				InGarbageCollectionHandle, std::decay_t<T>::StaticStruct(), InMember, SrcMonoObject);
@@ -507,7 +507,7 @@ struct TPropertyValue<T, std::enable_if_t<TIsUStruct<std::decay_t<T>>::Value, T>
 
 		auto SrcMonoObject = FCSharpEnvironment::GetEnvironment().GetDomain()->Object_New(FoundMonoClass);
 
-		FCSharpEnvironment::GetEnvironment().Bind(std::decay_t<T>::StaticStruct(), false);
+		FCSharpEnvironment::GetEnvironment().Bind<false>(std::decay_t<T>::StaticStruct());
 
 		if constexpr (bIsReference)
 		{

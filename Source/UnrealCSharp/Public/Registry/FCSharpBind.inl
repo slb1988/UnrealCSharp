@@ -14,21 +14,44 @@ auto FCSharpBind::Bind(FDomain* InDomain, UObject* InObject)
 		}
 	}
 	
-	return Bind<bIsWeak>(InDomain, InObject, false);
+	return Bind<bIsWeak, false>(InDomain, InObject);
 }
 
 template<bool bIsWeak>
 auto FCSharpBind::Bind(FDomain* InDomain, UClass* InClass)
 {
-	Bind(InDomain, static_cast<UStruct*>(InClass), false);
+	Bind<false>(InDomain, static_cast<UStruct*>(InClass));
 
 	return Bind<bIsWeak>(InDomain, static_cast<UObject*>(InClass));
 }
 
-template <bool bIsWeak>
-auto FCSharpBind::Bind(FDomain* InDomain, UObject* InObject, const bool bNeedMonoClass)
+template <bool bIsWeak, bool bNeedMonoClass>
+auto FCSharpBind::Bind(FDomain* InDomain, UObject* InObject)
 {
-	return BindImplementation<bIsWeak>(InDomain, InObject, bNeedMonoClass);
+	return BindImplementation<bIsWeak, bNeedMonoClass>(InDomain, InObject);
+}
+
+template <bool bNeedMonoClass>
+auto FCSharpBind::Bind(FDomain* InDomain, UStruct* InStruct)
+{
+	if (FCSharpEnvironment::GetEnvironment().GetClassDescriptor(InStruct))
+	{
+		return true;
+	}
+
+	if constexpr (bNeedMonoClass)
+	{
+		if(!CanBind(InDomain, InStruct))
+		{
+#if !WITH_EDITOR
+			NotOverrideTypes.Add(InStruct);
+#endif
+
+			return false;
+		}
+	}
+	
+	return BindImplementation(InDomain, InStruct);
 }
 
 template <typename T>
@@ -50,8 +73,8 @@ auto FCSharpBind::Bind(MonoObject* InMonoObject)
 	return BindImplementation<T>(InMonoObject);
 }
 
-template <bool bIsWeak>
-MonoObject* FCSharpBind::BindImplementation(FDomain* InDomain, UObject* InObject, const bool bNeedMonoClass)
+template <bool bIsWeak, bool bNeedMonoClass>
+MonoObject* FCSharpBind::BindImplementation(FDomain* InDomain, UObject* InObject)
 {
 	if (InDomain == nullptr || InObject == nullptr)
 	{
@@ -65,7 +88,7 @@ MonoObject* FCSharpBind::BindImplementation(FDomain* InDomain, UObject* InObject
 		return nullptr;
 	}
 
-	if (!Bind(InDomain, static_cast<UStruct*>(InClass), bNeedMonoClass))
+	if (!Bind<bNeedMonoClass>(InDomain, static_cast<UStruct*>(InClass)))
 	{
 		return nullptr;
 	}

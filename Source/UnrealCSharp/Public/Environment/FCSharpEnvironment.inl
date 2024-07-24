@@ -17,7 +17,7 @@ auto FCSharpEnvironment::Bind(UObject* Object) const
 template <bool bIsWeak>
 auto FCSharpEnvironment::Bind(const UObject* Object) const
 {
-	return Bind<bIsWeak>(const_cast<UObject*>(Object), bIsWeak);
+	return Bind<bIsWeak>(const_cast<UObject*>(Object));
 }
 
 template <bool bIsWeak>
@@ -26,10 +26,16 @@ auto FCSharpEnvironment::Bind(UClass* Class) const
 	return FCSharpBind::Bind<bIsWeak>(Domain, Class);
 }
 
-template <bool bIsWeak>
-auto FCSharpEnvironment::Bind(UObject* Object, const bool bNeedMonoClass) const
+template <bool bIsWeak, bool bNeedMonoClass>
+auto FCSharpEnvironment::Bind(UObject* Object) const
 {
-	return FCSharpBind::Bind<bIsWeak>(Domain, Object, bNeedMonoClass);
+	return FCSharpBind::Bind<bIsWeak, bNeedMonoClass>(Domain, Object);
+}
+
+template <bool bNeedMonoClass>
+bool FCSharpEnvironment::Bind(UStruct* InStruct) const
+{
+	return FCSharpBind::Bind<bNeedMonoClass>(Domain, InStruct);
 }
 
 template <typename T>

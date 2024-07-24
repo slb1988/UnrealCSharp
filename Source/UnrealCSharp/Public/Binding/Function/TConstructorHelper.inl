@@ -28,7 +28,7 @@ struct TConstructorHelper<std::tuple<Args...>>
 
 		if constexpr (TIsScriptStruct<Class>::Value)
 		{
-			FCSharpEnvironment::GetEnvironment().Bind(TBaseStructure<Class>::Get(), false);
+			FCSharpEnvironment::GetEnvironment().Bind<false>(TBaseStructure<Class>::Get());
 
 			FCSharpEnvironment::GetEnvironment().AddStructReference(TBaseStructure<Class>::Get(), Value, InMonoObject, true);
 		}

@@ -37,25 +37,6 @@ void FCSharpBind::Deinitialize()
 	}
 }
 
-bool FCSharpBind::Bind(FDomain* InDomain, UStruct* InStruct, const bool bNeedMonoClass)
-{
-	if (FCSharpEnvironment::GetEnvironment().GetClassDescriptor(InStruct))
-	{
-		return true;
-	}
-
-	if (bNeedMonoClass && !CanBind(InDomain, InStruct))
-	{
-#if !WITH_EDITOR
-		NotOverrideTypes.Add(InStruct);
-#endif
-
-		return false;
-	}
-
-	return BindImplementation(InDomain, InStruct);
-}
-
 bool FCSharpBind::Bind(FDomain* InDomain, MonoObject* InMonoObject, const FName& InStructName)
 {
 	return BindImplementation(InDomain, InMonoObject, InStructName);
@@ -84,7 +65,7 @@ bool FCSharpBind::BindClassDefaultObject(FDomain* InDomain, UObject* InObject)
 			{
 				if (InObject->IsA(BindClass.Class))
 				{
-					return BindClass.bNeedMonoClass ? false : !!Bind<false>(InDomain, InObject, false);
+					return BindClass.bNeedMonoClass ? false : !!Bind<false, false>(InDomain, InObject);
 				}
 			}
 		}
@@ -104,7 +85,7 @@ bool FCSharpBind::BindImplementation(FDomain* InDomain, UStruct* InStruct)
 
 	while (SuperStruct != nullptr)
 	{
-		Bind(InDomain, SuperStruct, false);
+		Bind<false>(InDomain, SuperStruct);
 
 		SuperStruct = SuperStruct->GetSuperStruct();
 	}
@@ -321,7 +302,7 @@ bool FCSharpBind::BindImplementation(FDomain* InDomain, MonoObject* InMonoObject
 		return false;
 	}
 
-	if (!Bind(InDomain, InScriptStruct, false))
+	if (!Bind<false>(InDomain, InScriptStruct))
 	{
 		return false;
 	}
